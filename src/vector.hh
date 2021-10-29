@@ -2,6 +2,6 @@
 
 
 template<size_t size>
-struct alignas(16) vecf {
+struct LIBMATH_ALIGNMENT vecf {
     float data[size];
 };
