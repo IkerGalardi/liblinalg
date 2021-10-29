@@ -4,7 +4,7 @@
 #include <cmath>
 #include <emmintrin.h>
 
-contexpr int LIBMATH_PARALLEL_FLOATS = 4;
+constexpr int LIBMATH_PARALLEL_FLOATS = 4;
 
 /*
  * Returns the length of the vector squared. Usefull when the exact length is not necessary 
@@ -43,10 +43,10 @@ vecf<size> operator+(const vecf<size>& left, const vecf<size>& right) {
 
     // Process in elements using SSE2 instructions
     for(int i = 0; i < parallel_iterations; i += 4) {
-        __m128 left_elem = _mm128_load_ps(left.data + i);
-        __m128 right_elem = _mm128_load_ps(left.data + i);
-        __m128 res_elem = _mm128_add_ps(left, right);
-        __mm128_store_ps(result.data + i);
+        __m128 left_elem = _mm_load_ps(left.data + i);
+        __m128 right_elem = _mm_load_ps(left.data + i);
+        __m128 res_elem = _mm_add_ps(left_elem, right_elem);
+        _mm_store_ps(result.data + i, res_elem);
     }
 
     // Process all the elements left
@@ -63,9 +63,25 @@ vecf<size> operator+(const vecf<size>& left, const vecf<size>& right) {
  */
 template<size_t size>
 vecf<size> operator-(const vecf<size>& left, const vecf<size>& right) {
+    // Maybe not all the elements can be executed using SSE2 instructions, so we see 
+    // beforehand how many can be executed in parallel and how many serially.
+    constexpr int left_after_parallel = size % LIBMATH_PARALLEL_FLOATS;
+    constexpr int parallel_iterations = size - left_after_parallel;
+
     vecf<size> result;
-    for(int i = 0; i < size; i++)
+
+    // Process in elements using SSE2 instructions
+    for(int i = 0; i < parallel_iterations; i += 4) {
+        __m128 left_elem = _mm_load_ps(left.data + i);
+        __m128 right_elem = _mm_load_ps(left.data + i);
+        __m128 res_elem = _mm_sub_ps(left_elem, right_elem);
+        _mm_store_ps(result.data + i, res_elem);
+    }
+
+    // Process all the elements left
+    for(int i = parallel_iterations; i < size; i++) {
         result.data[i] = left.data[i] - right.data[i];
+    }
 
     return result;
 }

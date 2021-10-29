@@ -11,8 +11,8 @@
 #include "vector.hh"
 
 // Include the selected backend implementation
-#ifdef LIBMATH_BACKEND_SIMPLE_CPU
+#if defined(LIBMATH_BACKEND_SIMPLE_CPU)
     #include "backends/simple_cpu.hh"
-#elif LIBMATH_BACKEND_SIMD_SSE2
+#elif defined(LIBMATH_BACKEND_SIMD_SSE2)
     #include "backends/sse2.hh"
 #endif
