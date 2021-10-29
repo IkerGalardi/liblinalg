@@ -1,8 +1,7 @@
 #pragma once 
 
-#include <array>
 
 template<size_t size>
-struct LIBMATH_VECTOR_ALIGN vecf {
+struct alignas(16) vecf {
     float data[size];
 };

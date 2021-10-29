@@ -1,7 +1,7 @@
 #include <cassert>
 #include <iostream>
 
-#include "vector.hh"
+#include "libmath.hh"
 
 #define EXECUTE_TEST(test_func) \
     std::cout << "Executing " #test_func "... "; \
