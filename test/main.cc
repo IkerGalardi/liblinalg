@@ -10,8 +10,8 @@
 
 void test_vector_comparisons() {
     // Test == comparison operator
-    vecf<3> a = {1, 2, 3};
-    vecf<3> b = {1, 2, 3};
+    vecf<6> a = {1, 2, 3, 4, 5, 6};
+    vecf<6> b = {1, 2, 3, 4, 5, 6};
     assert((a == b));
 
     // Test != comparison operator
@@ -21,9 +21,9 @@ void test_vector_comparisons() {
 }
 
 void test_vector_addition() {
-    vecf<3> a = {1, 2, 3};
-    vecf<3> b = {1, 2, 3};
-    assert((a + b == vecf<3>{2, 4, 6}));
+    vecf<6> a = {1, 2, 3, 1, 2, 3};
+    vecf<6> b = {1, 2, 3, 1, 2, 3};
+    assert((a + b == vecf<6>{2, 4, 6, 2, 4, 6}));
 }
 
 void test_vector_substraction() {
