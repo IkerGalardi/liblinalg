@@ -17,6 +17,9 @@ float length_squared(const vecf<size>& vec) {
     constexpr int left_after_parallel = size % LIBMATH_PARALLEL_FLOATS;
     constexpr int parallel_iterations = size - left_after_parallel;
 
+    // TODO: test to see when to start parallel implementation and when simply
+    //       use a for loop, maybe using the vector extensions to add two vectors
+    //       and add horizontally is slower.
     __m128 partial_sum = _mm_setzero_ps();
     // Process in elements using SSE instructions
     for(int i = 0; i < parallel_iterations; i += 4) {

@@ -58,8 +58,16 @@ void test_vector_substraction() {
 
 void test_vector_length() {
     vecf<1> a = {1};
-    assert((length(a) == 1));
+    assert((length_squared(a) == 1));
     
+    vecf<2> b = {1, 1};
+    assert((length_squared(b) == 2));
+
+    vecf<4> c = {1, 1, 1, 1};
+    assert((length_squared(c) == 4));
+
+    vecf<9> d = {1, 1, 1, 1, 1, 1, 1, 1, 1};
+    assert((length_squared(d) == 9));
 }
 
 int main() {
