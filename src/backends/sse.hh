@@ -21,18 +21,16 @@ float length_squared(const vecf<size>& vec) {
     //       use a for loop, maybe using the vector extensions to add two vectors
     //       and add horizontally is slower.
     __m128 partial_sum = _mm_setzero_ps();
-    // Process in elements using SSE instructions
     for(int i = 0; i < parallel_iterations; i += 4) {
         __m128 elems = _mm_load_ps(vec.data + i);
         __m128 elems_squared = _mm_mul_ps(elems, elems);
-        _mm_add_ps(partial_sum, elems_squared);
+        partial_sum = _mm_add_ps(partial_sum, elems_squared);
     }
 
-    // Create the actual sum using horizontal adds.
-    float sum;
-    __m128 hadded = _mm_hadd_ps(partial_sum, partial_sum);
-    hadded = _mm_hadd_ps(partial_sum, partial_sum);
-    _mm_store_ss(&sum, hadded);
+    // TODO: try using horizontal adds
+    alignas(16) float result[4];
+    _mm_store_ps(result, partial_sum);
+    float sum = result[0] + result[1] + result[2] + result[3];
 
     // Process all the elements left
     for(int i = parallel_iterations; i < size; i++) {
