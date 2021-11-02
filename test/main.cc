@@ -56,8 +56,15 @@ void test_vector_substraction() {
     assert((g - h == vecf<1>{0}));
 }
 
+void test_vector_length() {
+    vecf<1> a = {1};
+    assert((length(a) == 1));
+    
+}
+
 int main() {
     EXECUTE_TEST(test_vector_comparisons);
     EXECUTE_TEST(test_vector_addition);
     EXECUTE_TEST(test_vector_substraction);
+    EXECUTE_TEST(test_vector_length);
 }

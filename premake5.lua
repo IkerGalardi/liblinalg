@@ -3,22 +3,26 @@ workspace "lmake"
     configurations {"Debug", "Release"}
     flags {"MultiProcessorCompile"}
 
+
+
     project "tests"
-    kind "ConsoleApp"
-    language "C++"
-    cppdialect "C++17"
-    staticruntime "on"
+        kind "ConsoleApp"
+        language "C++"
+        cppdialect "C++17"
+        staticruntime "on"
 
-    targetdir("bin/")
-    objdir("bin/obj/")
+        buildoptions "-msse4.2"
 
-    files {"src/**.hh", "test/**.cc"}
-    includedirs {"src"}
+        targetdir("bin/")
+        objdir("bin/obj/")
 
-    filter "configurations:Debug"
-        symbols "on"
-        optimize "off"
-    filter "configurations:Release"
-        optimize "on"
-        symbols "off"
-        runtime "Release"
+        files {"src/**.hh", "test/**.cc"}
+        includedirs {"src"}
+
+        filter "configurations:Debug"
+            symbols "on"
+            optimize "off"
+        filter "configurations:Release"
+            optimize "on"
+            symbols "off"
+            runtime "Release"

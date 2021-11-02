@@ -2,7 +2,7 @@
 #pragma once
 
 #include <cmath>
-#include <emmintrin.h>
+#include <x86intrin.h>
 
 constexpr int LIBMATH_PARALLEL_FLOATS = 4;
 
@@ -12,9 +12,28 @@ constexpr int LIBMATH_PARALLEL_FLOATS = 4;
  */
 template<size_t size>
 float length_squared(const vecf<size>& vec) {
-    float sum = 0.0;
-    for(int i = 0; i < size; i++) {
-        sum += vec[i] * vec[i];
+    // Maybe not all the elements can be executed using SSE2 instructions, so we see 
+    // beforehand how many can be executed in parallel and how many serially.
+    constexpr int left_after_parallel = size % LIBMATH_PARALLEL_FLOATS;
+    constexpr int parallel_iterations = size - left_after_parallel;
+
+    __m128 partial_sum = _mm_setzero_ps();
+    // Process in elements using SSE instructions
+    for(int i = 0; i < parallel_iterations; i += 4) {
+        __m128 elems = _mm_load_ps(vec.data + i);
+        __m128 elems_squared = _mm_mul_ps(elems, elems);
+        _mm_add_ps(partial_sum, elems_squared);
+    }
+
+    // Create the actual sum using horizontal adds.
+    float sum;
+    __m128 hadded = _mm_hadd_ps(partial_sum, partial_sum);
+    hadded = _mm_hadd_ps(partial_sum, partial_sum);
+    _mm_store_ss(&sum, hadded);
+
+    // Process all the elements left
+    for(int i = parallel_iterations; i < size; i++) {
+        sum += vec.data[i] * vec.data[i];
     }
 
     return sum;
