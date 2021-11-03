@@ -49,6 +49,40 @@ float length(const vecf<size>& vec) {
 }
 
 /*
+ * Returns dot product of two vectors.
+ */
+template<size_t size>
+float dot(const vecf<size>& left, const vecf<size>& right) {
+    // Maybe not all the elements can be executed using SSE2 instructions, so we see 
+    // beforehand how many can be executed in parallel and how many serially.
+    constexpr int left_after_parallel = size % LIBMATH_PARALLEL_FLOATS;
+    constexpr int parallel_iterations = size - left_after_parallel;
+
+    // TODO: test to see when to start parallel implementation and when simply
+    //       use a for loop, maybe using the vector extensions to add two vectors
+    //       and add horizontally is slower.
+    __m128 partial_sum = _mm_setzero_ps();
+    for(int i = 0; i < parallel_iterations; i += 4) {
+        __m128 left_elems = _mm_load_ps(left.data + i);
+        __m128 right_elems = _mm_load_ps(right.data + i);
+        __m128 multiplied = _mm_mul_ps(right_elems, left_elems);
+        partial_sum = _mm_add_ps(partial_sum, multiplied);
+    }
+
+    // TODO: try using horizontal adds
+    alignas(16) float result[4];
+    _mm_store_ps(result, partial_sum);
+    float sum = result[0] + result[1] + result[2] + result[3];
+
+    // Process all the elements left
+    for(int i = parallel_iterations; i < size; i++) {
+        sum += left.data[i] * right.data[i];
+    }
+
+    return sum;
+}
+
+/*
  * Performs the addition between two vectors of equal size. If the sizes of the vectors don't
  * match a compilation error is thrown.
  */
