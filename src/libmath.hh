@@ -1,6 +1,6 @@
 #pragma once
 
-#define LIBMATH_BACKEND_SIMD_SSE
+#define LIBMATH_BACKEND_SIMPLE_CPU
 
 #if defined(LIBMATH_BACKEND_SIMPLE_CPU)
     #define LIBMATH_ALIGNMENT   

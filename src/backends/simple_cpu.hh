@@ -10,7 +10,7 @@ template<size_t size>
 float length_squared(const vecf<size>& vec) {
     float sum = 0.0;
     for(int i = 0; i < size; i++) {
-        sum += vec[i] * vec[i];
+        sum += vec.data[i] * vec.data[i];
     }
 
     return sum;
@@ -22,6 +22,19 @@ float length_squared(const vecf<size>& vec) {
 template<size_t size>
 float length(const vecf<size>& vec) {
     return std::sqrt(length_squared(vec));
+}
+
+/*
+ * Returns dot product of two vectors.
+ */
+template<size_t size>
+float dot(const vecf<size>& left, const vecf<size>& right) {
+    float sum = 0.0;
+    for(int i = 0; i < size; i++) {
+        sum += right.data[i] * left.data[i];
+    }
+
+    return sum;
 }
 
 /*
