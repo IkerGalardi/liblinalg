@@ -70,9 +70,28 @@ void test_vector_length() {
     assert((length_squared(d) == 9));
 }
 
+void test_vector_multiplication() {
+    vecf<1> a = {2};
+    vecf<1> b = {2};
+    assert((a * b == vecf<1>{4}));
+
+    vecf<2> c = {2, 1};
+    vecf<2> d = {2, 4};
+    assert((c * d == vecf<2>{4, 4}));
+
+    vecf<4> e = {2, 1, 2, 7};
+    vecf<4> f = {2, 4, 3, 1};
+    assert((e * f == vecf<4>{4, 4, 6, 7}));
+
+    vecf<6> g = {2, 1, 2, 7, 1, 8};
+    vecf<6> h = {2, 4, 3, 1, 8, 1};
+    assert((g * h == vecf<6>{4, 4, 6, 7, 8, 8}));
+}
+
 int main() {
     EXECUTE_TEST(test_vector_comparisons);
     EXECUTE_TEST(test_vector_addition);
     EXECUTE_TEST(test_vector_substraction);
     EXECUTE_TEST(test_vector_length);
+    EXECUTE_TEST(test_vector_multiplication);
 }
