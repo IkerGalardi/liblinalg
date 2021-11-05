@@ -25,6 +25,19 @@ float length(const vecf<size>& vec) {
 }
 
 /*
+ * Returns dot product of two vectors.
+ */
+template<size_t size>
+float dot(const vecf<size>& left, const vecf<size>& right) {
+    float sum = 0.0;
+    for(int i = 0; i < size; i++) {
+        sum += right.data[i] * left.data[i];
+    }
+
+    return sum;
+}
+
+/*
  * Performs the addition between two vectors of equal size. If the sizes of the vectors don't
  * match a compilation error is thrown.
  */

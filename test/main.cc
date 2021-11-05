@@ -70,6 +70,28 @@ void test_vector_length() {
     assert((length_squared(d) == 9));
 }
 
+void test_vector_dotproduct() {
+    vecf<1> a = {1};
+    vecf<1> b = {1};
+    assert((dot(a, b) == 1));
+
+    vecf<2> c = {1, 2};
+    vecf<2> d = {1, 2};
+    assert((dot(c, d) == 5));
+
+    vecf<4> e = {1, 2, 2, 4};
+    vecf<4> f = {1, 3, 2, 7};
+    assert((dot(e, f) == 39));
+
+    vecf<6> g = {1, 2, 2, 4, 6, 5};
+    vecf<6> h = {1, 3, 2, 7, 1, 3};
+    assert((dot(g, h) == 60));
+
+    vecf<9> j = {1, 2, 2, 4, 6, 5, 4, 2, 9};
+    vecf<9> k = {1, 3, 2, 7, 1, 3, 4, 1, 3};
+    assert((dot(j, k) == 105));
+}
+
 void test_vector_multiplication() {
     vecf<1> a = {2};
     vecf<1> b = {2};
@@ -93,5 +115,6 @@ int main() {
     EXECUTE_TEST(test_vector_addition);
     EXECUTE_TEST(test_vector_substraction);
     EXECUTE_TEST(test_vector_length);
+    EXECUTE_TEST(test_vector_dotproduct);
     EXECUTE_TEST(test_vector_multiplication);
 }
