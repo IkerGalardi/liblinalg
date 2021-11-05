@@ -48,3 +48,16 @@ matf<nrow, ncol> operator-(const matf<nrow, ncol>& left, const matf<nrow, ncol>&
 
     return result;
 }
+
+template<size_t nrow, size_t ncol>
+matf<nrow, ncol> operator*(float scalar, const matf<nrow, ncol>& right) {
+    matf<nrow, ncol> result;
+
+    for(int i = 0; i < nrow; i++) {
+        for(int j = 0; j < ncol; j++) {
+            result.data[i][j] = scalar * right.data[i][j];
+        }
+    }
+
+    return result;
+}
