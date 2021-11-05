@@ -64,6 +64,32 @@ vecf<size> operator-(const vecf<size>& left, const vecf<size>& right) {
 }
 
 /*
+ * Performs the multiplication between two vectors of equal size. If the sizes of the 
+ * vectors don't match a compilation error is thrown.
+ */
+template<size_t size>
+vecf<size> operator*(const vecf<size>& left, const vecf<size>& right) {
+    vecf<size> result;
+    for(int i = 0; i < size; i++)
+        result.data[i] = left.data[i] * right.data[i];
+
+    return result;
+}
+
+/*
+ * Performs the multiplication between a scalar and a vector of equal size. If the sizes
+ * of the vectors don't match a compilation error is thrown.
+ */
+template<size_t size>
+vecf<size> operator*(float scalar, const vecf<size>& right) {
+    vecf<size> result;
+    for(int i = 0; i < size; i++)
+        result.data[i] = scalar * right.data[i];
+
+    return result;
+}
+
+/*
  * Compares the passed vectors. True is returned if both vectors are equal and false is returned
  * if the vectors are not equal.
  */

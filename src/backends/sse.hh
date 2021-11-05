@@ -127,7 +127,7 @@ vecf<size> operator-(const vecf<size>& left, const vecf<size>& right) {
     // Process in elements using SSE2 instructions
     for(int i = 0; i < parallel_iterations; i += 4) {
         __m128 left_elem = _mm_load_ps(left.data + i);
-        __m128 right_elem = _mm_load_ps(left.data + i);
+        __m128 right_elem = _mm_load_ps(right.data + i);
         __m128 res_elem = _mm_sub_ps(left_elem, right_elem);
         _mm_store_ps(result.data + i, res_elem);
     }
@@ -135,6 +135,64 @@ vecf<size> operator-(const vecf<size>& left, const vecf<size>& right) {
     // Process all the elements left
     for(int i = parallel_iterations; i < size; i++) {
         result.data[i] = left.data[i] - right.data[i];
+    }
+
+    return result;
+}
+
+/*
+ * Performs the multiplication between two vectors of equal size. If the sizes of the 
+ * vectors don't match a compilation error is thrown.
+ */
+template<size_t size>
+vecf<size> operator*(const vecf<size>& left, const vecf<size>& right) {
+    // Maybe not all the elements can be executed using SSE2 instructions, so we see 
+    // beforehand how many can be executed in parallel and how many serially.
+    constexpr int left_after_parallel = size % LIBMATH_PARALLEL_FLOATS;
+    constexpr int parallel_iterations = size - left_after_parallel;
+
+    vecf<size> result;
+
+    // Process in elements using SSE2 instructions
+    for(int i = 0; i < parallel_iterations; i += 4) {
+        __m128 left_elem = _mm_load_ps(left.data + i);
+        __m128 right_elem = _mm_load_ps(right.data + i);
+        __m128 res_elem = _mm_mul_ps(left_elem, right_elem);
+        _mm_store_ps(result.data + i, res_elem);
+    }
+
+    // Process all the elements left
+    for(int i = parallel_iterations; i < size; i++) {
+        result.data[i] = left.data[i] * right.data[i];
+    }
+
+    return result;
+}
+
+/*
+ * Performs the multiplication between a scalar and a vector of equal size. If the sizes
+ * of the vectors don't match a compilation error is thrown.
+ */
+template<size_t size>
+vecf<size> operator*(float scalar, const vecf<size>& right) {
+    // Maybe not all the elements can be executed using SSE2 instructions, so we see 
+    // beforehand how many can be executed in parallel and how many serially.
+    constexpr int left_after_parallel = size % LIBMATH_PARALLEL_FLOATS;
+    constexpr int parallel_iterations = size - left_after_parallel;
+
+    vecf<size> result;
+
+    // Process in elements using SSE2 instructions
+    __m128 scalar_vectorized = _mm_set1_ps(scalar);
+    for(int i = 0; i < parallel_iterations; i += 4) {
+        __m128 right_elem = _mm_load_ps(right.data + i);
+        __m128 res_elem = _mm_mul_ps(scalar_vectorized, right_elem);
+        _mm_store_ps(result.data + i, res_elem);
+    }
+
+    // Process all the elements left
+    for(int i = parallel_iterations; i < size; i++) {
+        result.data[i] = scalar * right.data[i];
     }
 
     return result;
