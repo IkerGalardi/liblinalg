@@ -1,4 +1,4 @@
-#include <cmath>
+#pragma once
 
 /*
  * Returns the length of the vector squared. Usefull when the exact length is not necessary 

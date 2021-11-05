@@ -6,4 +6,4 @@
 template<size_t ncol, size_t nrow>
 struct matf {
     float data[nrow][ncol];
-}
+};

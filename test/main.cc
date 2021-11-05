@@ -110,6 +110,47 @@ void test_vector_multiplication() {
     assert((g * h == vecf<6>{4, 4, 6, 7, 8, 8}));
 }
 
+void test_matrix_comparisons() {
+    matf<2, 2> a = {1, 2,
+                    3, 2};
+    matf<2, 2> b = {1, 5,
+                    2, 1};
+    assert(a != b);
+    matf<4, 4> c = {1, 2, 4, 1,
+                    3, 2, 2, 7,
+                    2, 1, 6, 9,
+                    1, 5, 1, 8};
+    matf<4, 4> d = {1, 2, 4, 1,
+                    3, 2, 2, 7,
+                    2, 1, 6, 9,
+                    1, 5, 1, 8};
+    assert(c == d);
+}
+
+void test_matrix_addition() {
+    matf<2, 2> a = {1, 2,
+                    3, 2};
+    matf<2, 2> b = {1, 5,
+                    2, 1};
+    assert((a + b == matf<2, 2>{2, 7, 
+                                5, 3}));
+
+    matf<4, 4> c = {1, 2, 4, 1,
+                    3, 2, 2, 7,
+                    2, 1, 6, 9,
+                    1, 5, 1, 8};
+    matf<4, 4> d = {1, 4, 2, 1,
+                    3, 2, 7, 1,
+                    1, 4, 1, 1,
+                    1, 5, 1, 1};
+    assert((c + d == matf<4, 4>{2, 6,  6, 2,
+                                6, 4,  9, 8,
+                                3, 5,  7, 10,
+                                2, 10, 2, 9}));
+
+    // TODO: test more sizes
+}
+
 int main() {
     EXECUTE_TEST(test_vector_comparisons);
     EXECUTE_TEST(test_vector_addition);
@@ -117,4 +158,6 @@ int main() {
     EXECUTE_TEST(test_vector_length);
     EXECUTE_TEST(test_vector_dotproduct);
     EXECUTE_TEST(test_vector_multiplication);
+    EXECUTE_TEST(test_matrix_comparisons);
+    EXECUTE_TEST(test_matrix_addition);
 }
