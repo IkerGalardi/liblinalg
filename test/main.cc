@@ -90,6 +90,7 @@ void test_vector_dotproduct() {
     vecf<9> j = {1, 2, 2, 4, 6, 5, 4, 2, 9};
     vecf<9> k = {1, 3, 2, 7, 1, 3, 4, 1, 3};
     assert((dot(j, k) == 105));
+}
 
 void test_vector_multiplication() {
     vecf<1> a = {2};
