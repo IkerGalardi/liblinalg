@@ -12,7 +12,7 @@
 
 // Include the selected backend implementation
 #if defined(LIBMATH_BACKEND_SIMPLE_CPU)
-    #include "backends/simple_cpu.hh"
+    #include "backends/simple/simple.hh"
 #elif defined(LIBMATH_BACKEND_SIMD_SSE)
-    #include "backends/sse.hh"
+    #include "backends/sse/sse.hh"
 #endif

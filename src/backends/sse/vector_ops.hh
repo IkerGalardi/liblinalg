@@ -1,6 +1,3 @@
-
-#pragma once
-
 #include <cmath>
 #include <x86intrin.h>
 
