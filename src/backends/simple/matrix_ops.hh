@@ -61,3 +61,22 @@ matf<nrow, ncol> operator*(float scalar, const matf<nrow, ncol>& right) {
 
     return result;
 }
+
+template<size_t lnrow, size_t lncol, size_t rncol>
+matf<lnrow, rncol> operator*(const matf<lnrow, lncol>& left, 
+                             const matf<lncol, rncol>& right) {
+    matf<lnrow, rncol> result;
+
+    for(int i = 0; i < lnrow; i++) {
+        for(int j = 0; j < lncol; i++) {
+            float elem = 0.0f;
+            for(int k = 0; k < rncol; k++) {
+                elem += left.data[i][k] * right.data[k][j];
+            }
+
+            result.data[i][j] = elem;
+        } 
+    }
+
+    return result;
+}
