@@ -151,6 +151,16 @@ void test_matrix_addition() {
     // TODO: test more sizes
 }
 
+void test_matrix_multiplication() {
+    matf<2, 2> a = {1, 2,
+                    3, 2};
+    matf<2, 2> b = {1, 5,
+                    2, 1};
+    assert((a * b == matf<2, 2>{5, 7, 
+                                7, 17}));
+
+}
+
 int main() {
     EXECUTE_TEST(test_vector_comparisons);
     EXECUTE_TEST(test_vector_addition);
@@ -160,4 +170,5 @@ int main() {
     EXECUTE_TEST(test_vector_multiplication);
     EXECUTE_TEST(test_matrix_comparisons);
     EXECUTE_TEST(test_matrix_addition);
+    EXECUTE_TEST(test_matrix_multiplication);
 }

@@ -68,9 +68,9 @@ matf<lnrow, rncol> operator*(const matf<lnrow, lncol>& left,
     matf<lnrow, rncol> result;
 
     for(int i = 0; i < lnrow; i++) {
-        for(int j = 0; j < lncol; i++) {
+        for(int j = 0; j < rncol; j++) {
             float elem = 0.0f;
-            for(int k = 0; k < rncol; k++) {
+            for(int k = 0; k < lncol; k++) {
                 elem += left.data[i][k] * right.data[k][j];
             }
 
