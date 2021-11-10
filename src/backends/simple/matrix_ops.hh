@@ -9,7 +9,7 @@ bool operator==(const matf<lnrow, lncol>& left, const matf<rnrow, rncol>& right)
 
     for(int i = 0; i < lnrow; i++) {
         for(int j = 0; j < rncol; j++) {
-            if(left.data[i][j] != right.data[i][j]) {
+            if(left(i, j) != right(i, j)) {
                 return false;
             }
         }
@@ -29,7 +29,7 @@ matf<nrow, ncol> operator+(const matf<nrow, ncol>& left, const matf<nrow, ncol>&
 
     for(int i = 0; i < nrow; i++) {
         for(int j = 0; j < ncol; j++) {
-            result.data[i][j] = left.data[i][j] + right.data[i][j];
+            result(i, j) = left(i, j) + right(i, j);
         }
     }
 
@@ -42,7 +42,7 @@ matf<nrow, ncol> operator-(const matf<nrow, ncol>& left, const matf<nrow, ncol>&
 
     for(int i = 0; i < nrow; i++) {
         for(int j = 0; j < ncol; j++) {
-            result.data[i][j] = left.data[i][j] - right.data[i][j];
+            result(i, j) = left(i, j) - right(i, j);
         }
     }
 
@@ -55,7 +55,7 @@ matf<nrow, ncol> operator*(float scalar, const matf<nrow, ncol>& right) {
 
     for(int i = 0; i < nrow; i++) {
         for(int j = 0; j < ncol; j++) {
-            result.data[i][j] = scalar * right.data[i][j];
+            result(i, j) = scalar * right(i, j);
         }
     }
 
@@ -69,10 +69,11 @@ matf<lnrow, rncol> operator*(const matf<lnrow, lncol>& left,
 
     for(int i = 0; i < lnrow; i++) {
         for(int j = 0; j < rncol; j++) {
-            result.data[i][j] = 0.0f;
+            float sum = 0.0f;
             for(int k = 0; k < lncol; k++) {
-                result.data[i][j] += left.data[i][k] * right.data[k][j];
+                sum += left(i, k) * right(k, j);
             }
+            result(i, j) = sum;
         } 
     }
 

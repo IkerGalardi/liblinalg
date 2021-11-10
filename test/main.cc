@@ -8,6 +8,17 @@
     test_func(); \
     std::cout << "OK" << std::endl
 
+template<size_t nrow, size_t ncol> 
+constexpr void print_matrix(const matf<nrow, ncol>& mat) {
+    for(int i = 0; i < nrow; i++) {
+        for(int j = 0; j < ncol; j++) {
+            std::cout << mat(i, j) << ", ";
+        }
+
+        std::cout << std::endl;
+    }
+}
+
 void test_vector_comparisons() {
     // Test == comparison operator
     vecf<6> a = {1, 2, 3, 4, 5, 6};
@@ -110,6 +121,17 @@ void test_vector_multiplication() {
     assert((g * h == vecf<6>{4, 4, 6, 7, 8, 8}));
 }
 
+void test_matrix_indexing() {
+    matf<2, 2> a = {1, 2, 
+                    3, 4};
+    assert((a(0, 1) == 2));
+
+
+    matf<2, 4> b = {1, 2, 3, 4,
+                    5, 6, 7, 8};
+    assert((b(0, 3) == 4));
+}
+
 void test_matrix_comparisons() {
     matf<2, 2> a = {1, 2,
                     3, 2};
@@ -188,9 +210,8 @@ void test_matrix_multiplication() {
                     5, 2, 1, 
                     1, 7, 2,
                     3, 2, 1};
-    auto res = g * h;
-    assert((res == matf<3, 2>{33, 29, 14,
-                                42, 38, 22}));
+    assert((g * h == matf<2, 3>{33, 29, 14,
+                              42, 38, 22}));
 }
 
 int main() {
@@ -200,6 +221,7 @@ int main() {
     EXECUTE_TEST(test_vector_length);
     EXECUTE_TEST(test_vector_dotproduct);
     EXECUTE_TEST(test_vector_multiplication);
+    EXECUTE_TEST(test_matrix_indexing);
     EXECUTE_TEST(test_matrix_comparisons);
     EXECUTE_TEST(test_matrix_addition);
     EXECUTE_TEST(test_matrix_multiplication);
