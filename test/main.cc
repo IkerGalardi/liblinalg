@@ -19,6 +19,14 @@ constexpr void print_matrix(const matf<nrow, ncol>& mat) {
     }
 }
 
+template<size_t n> 
+constexpr void print_vector(const vecf<n>& vec) {
+    for(int i = 0; i < n; i++) {
+        std::cout << vec.data[i] << ", ";
+    }
+    std::cout << std::endl;
+}
+
 void test_vector_comparisons() {
     // Test == comparison operator
     vecf<6> a = {1, 2, 3, 4, 5, 6};
@@ -214,6 +222,24 @@ void test_matrix_multiplication() {
                               42, 38, 22}));
 }
 
+void test_matrix_vector_multiplication() {
+    matf<2, 2> a = {1, 2,
+                    3, 4};
+    print_matrix(a);
+    vecf<2> b = {5, 6};
+    print_vector(b);
+
+    auto res = a * b;
+    print_vector(res);
+    assert((res == vecf<2>{7, 49}));
+
+    vecf<2> c = {5, 6};
+    matf<2, 2> d = {1, 2,
+                    3, 4};
+
+    assert((c * b == vecf<2>{23, 34}));
+}
+
 int main() {
     EXECUTE_TEST(test_vector_comparisons);
     EXECUTE_TEST(test_vector_addition);
@@ -225,4 +251,5 @@ int main() {
     EXECUTE_TEST(test_matrix_comparisons);
     EXECUTE_TEST(test_matrix_addition);
     EXECUTE_TEST(test_matrix_multiplication);
+    EXECUTE_TEST(test_matrix_vector_multiplication);
 }
