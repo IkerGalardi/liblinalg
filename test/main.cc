@@ -4,7 +4,7 @@
 #include "libmath.hh"
 
 #define EXECUTE_TEST(test_func) \
-    std::cout << "Executing " #test_func "... "; \
+    std::cout << "Executing " #test_func "... " << std::flush; \
     test_func(); \
     std::cout << "OK" << std::endl
 

@@ -27,8 +27,20 @@ template<size_t nrow, size_t ncol>
 matf<nrow, ncol> operator+(const matf<nrow, ncol>& left, const matf<nrow, ncol>& right) {
     matf<nrow, ncol> result;
 
+    // Not all elements can be processed in parallel, so we calculate how much
+    // we need to do in serie.
+    constexpr int cant_process = ncol % LIBMATH_PARALLEL_FLOATS;
+
     for(int i = 0; i < nrow; i++) {
-        for(int j = 0; j < ncol; j++) {
+        for(int j = 0; j < ncol - cant_process; j+=4) {
+            __m128 elems_left = _mm_loadu_ps(left.data + i * ncol + j);
+            __m128 elems_right = _mm_loadu_ps(right.data + i * ncol + j);
+            __m128 summed = _mm_add_ps(elems_left, elems_right);
+            _mm_storeu_ps(result.data + i * ncol + j, summed);
+        }
+        
+        // Process the left elements in serie.
+        for(int j = ncol - cant_process; j < ncol; j++) {
             result(i, j) = left(i, j) + right(i, j);
         }
     }
@@ -40,8 +52,20 @@ template<size_t nrow, size_t ncol>
 matf<nrow, ncol> operator-(const matf<nrow, ncol>& left, const matf<nrow, ncol>& right) {
     matf<nrow, ncol> result;
 
+    // Not all elements can be processed in parallel, so we calculate how much
+    // we need to do in serie.
+    constexpr int cant_process = ncol % LIBMATH_PARALLEL_FLOATS;
+
     for(int i = 0; i < nrow; i++) {
-        for(int j = 0; j < ncol; j++) {
+        for(int j = 0; j < ncol - cant_process; j+=4) {
+            __m128 elems_left = _mm_loadu_ps(left.data + i * ncol + j);
+            __m128 elems_right = _mm_loadu_ps(right.data + i * ncol + j);
+            __m128 subed = _mm_sub_ps(elems_left, elems_right);
+            _mm_storeu_ps(result.data + i * ncol + j, subed);
+        }
+        
+        // Process the left elements in serie.
+        for(int j = ncol - cant_process; j < ncol; j++) {
             result(i, j) = left(i, j) - right(i, j);
         }
     }
@@ -53,9 +77,21 @@ template<size_t nrow, size_t ncol>
 matf<nrow, ncol> operator*(float scalar, const matf<nrow, ncol>& right) {
     matf<nrow, ncol> result;
 
+    // Not all elements can be processed in parallel, so we calculate how much
+    // we need to do in serie.
+    constexpr int cant_process = ncol % LIBMATH_PARALLEL_FLOATS;
+
+    __m128 vec_scalar = _mm_set1_ps(scalar);
     for(int i = 0; i < nrow; i++) {
-        for(int j = 0; j < ncol; j++) {
-            result(i, j) = scalar * right(i, j);
+        for(int j = 0; j < ncol - cant_process; j+=4) {
+            __m128 elems_right = _mm_loadu_ps(right.data + i * ncol + j);
+            __m128 muled = _mm_mul_ps(vec_scalar, elems_right);
+            _mm_storeu_ps(result.data + i * ncol + j, muled);
+        }
+        
+        // Process the left elements in serie.
+        for(int j = ncol - cant_process; j < ncol; j++) {
+            result(i, j) *= scalar;
         }
     }
 

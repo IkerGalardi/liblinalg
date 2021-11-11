@@ -1,7 +1,4 @@
 #include <cmath>
-#include <x86intrin.h>
-
-constexpr int LIBMATH_PARALLEL_FLOATS = 4;
 
 /*
  * Returns the length of the vector squared. Usefull when the exact length is not necessary 
