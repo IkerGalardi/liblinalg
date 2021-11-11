@@ -223,21 +223,17 @@ void test_matrix_multiplication() {
 }
 
 void test_matrix_vector_multiplication() {
-    matf<2, 2> a = {1, 2,
-                    3, 4};
-    print_matrix(a);
-    vecf<2> b = {5, 6};
-    print_vector(b);
-
+    matf<2, 3> a = {1, -1, 2,
+                    0, -3, 1};
+    vecf<3> b = {2, 1, 0};
     auto res = a * b;
-    print_vector(res);
-    assert((res == vecf<2>{7, 49}));
+    assert((res == vecf<2>{1, -3}));
 
-    vecf<2> c = {5, 6};
-    matf<2, 2> d = {1, 2,
-                    3, 4};
-
-    assert((c * b == vecf<2>{23, 34}));
+    matf<3, 3> c = {1, 2, 3, 
+                    4, 5, 6, 
+                    7, 8, 9};
+    vecf<3> d = {2, 1, 3};
+    assert((c * d == vecf<3>{13, 31, 49}));
 }
 
 int main() {
