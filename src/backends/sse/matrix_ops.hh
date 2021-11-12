@@ -43,6 +43,7 @@ matf<nrow, ncol> operator+(const matf<nrow, ncol>& left, const matf<nrow, ncol>&
     // we need to do in serie.
     constexpr int cant_process = ncol % LIBMATH_PARALLEL_FLOATS;
 
+    // Process as much elements with SIMD instructions.
     for(int i = 0; i < nrow; i++) {
         for(int j = 0; j < ncol - cant_process; j+=4) {
             __m128 elems_left = _mm_loadu_ps(left.data + i * ncol + j);
@@ -51,7 +52,8 @@ matf<nrow, ncol> operator+(const matf<nrow, ncol>& left, const matf<nrow, ncol>&
             _mm_storeu_ps(result.data + i * ncol + j, summed);
         }
         
-        // Process the left elements in serie.
+        // Some elements couldn't be processed in parallel, process them now
+        // in serie.
         for(int j = ncol - cant_process; j < ncol; j++) {
             result(i, j) = left(i, j) + right(i, j);
         }
@@ -72,6 +74,7 @@ matf<nrow, ncol> operator-(const matf<nrow, ncol>& left, const matf<nrow, ncol>&
     // we need to do in serie.
     constexpr int cant_process = ncol % LIBMATH_PARALLEL_FLOATS;
 
+    // Process as much elements with SIMD instructions.
     for(int i = 0; i < nrow; i++) {
         for(int j = 0; j < ncol - cant_process; j+=4) {
             __m128 elems_left = _mm_loadu_ps(left.data + i * ncol + j);
@@ -80,7 +83,8 @@ matf<nrow, ncol> operator-(const matf<nrow, ncol>& left, const matf<nrow, ncol>&
             _mm_storeu_ps(result.data + i * ncol + j, subed);
         }
         
-        // Process the left elements in serie.
+        // Some elements couldn't be processed in parallel, process them now
+        // in serie.
         for(int j = ncol - cant_process; j < ncol; j++) {
             result(i, j) = left(i, j) - right(i, j);
         }
@@ -100,6 +104,7 @@ matf<nrow, ncol> operator*(float scalar, const matf<nrow, ncol>& right) {
     // we need to do in serie.
     constexpr int cant_process = ncol % LIBMATH_PARALLEL_FLOATS;
 
+    // Process as much elements with SIMD instructions.
     __m128 vec_scalar = _mm_set1_ps(scalar);
     for(int i = 0; i < nrow; i++) {
         for(int j = 0; j < ncol - cant_process; j+=4) {
@@ -108,7 +113,8 @@ matf<nrow, ncol> operator*(float scalar, const matf<nrow, ncol>& right) {
             _mm_storeu_ps(result.data + i * ncol + j, muled);
         }
         
-        // Process the left elements in serie.
+        // Some elements couldn't be processed in parallel, process them now
+        // in serie.
         for(int j = ncol - cant_process; j < ncol; j++) {
             result(i, j) *= scalar;
         }
@@ -130,6 +136,8 @@ matf<lnrow, rncol> operator*(const matf<lnrow, lncol>& left,
     for(int i = 0; i < lnrow; i++) {
         for(int j = 0; j < rncol; j++) {
             constexpr int cant_process = lncol % LIBMATH_PARALLEL_FLOATS;
+            
+            // Process as much elements as possible using SIMD instructions.
             __m128 partial_sum = _mm_setzero_ps();
             for(int k = 0; k < lncol - cant_process; k+=4) {
                 __m128 left_elems = _mm_loadu_ps(left.data + i * lncol + k);
@@ -147,6 +155,8 @@ matf<lnrow, rncol> operator*(const matf<lnrow, lncol>& left,
             alignas(16) float sum_elems[4];
             _mm_store_ps(sum_elems, partial_sum);
             
+            // Some elements couldn't be processed in parallel, process them now
+            // in serie.
             float sum = sum_elems[3] + sum_elems[2] + sum_elems[1] + sum_elems[0];
             for(int k = lncol - cant_process; k < lncol; k++){
                 sum += left(i, k) * right(k, j);
