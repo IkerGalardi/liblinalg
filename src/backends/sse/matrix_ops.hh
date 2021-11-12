@@ -101,17 +101,38 @@ matf<nrow, ncol> operator*(float scalar, const matf<nrow, ncol>& right) {
 template<size_t lnrow, size_t lncol, size_t rncol>
 matf<lnrow, rncol> operator*(const matf<lnrow, lncol>& left, 
                              const matf<lncol, rncol>& right) {
-    matf<lnrow, rncol> result;
+    matf<lnrow, rncol> result {0,};
 
     for(int i = 0; i < lnrow; i++) {
         for(int j = 0; j < rncol; j++) {
-            float sum = 0.0f;
-            for(int k = 0; k < lncol; k++) {
+            constexpr int cant_process = lncol % LIBMATH_PARALLEL_FLOATS;
+            __m128 partial_sum = _mm_setzero_ps();
+            for(int k = 0; k < lncol - cant_process; k+=4) {
+                __m128 left_elems = _mm_loadu_ps(left.data + i * lncol + k);
+
+                // TODO: fix this workaround if it's possible
+                __m128 right_col_elems = _mm_set_ps(right(k + 3, j), 
+                                                    right(k + 2, j),
+                                                    right(k + 1, j),
+                                                    right(k + 0, j));
+                __m128 multiplied = _mm_mul_ps(left_elems, right_col_elems);
+                partial_sum = _mm_add_ps(partial_sum, multiplied);
+            }
+
+            // TODO: maybe a more efficient way of doing an hadd??
+            alignas(16) float sum_elems[4];
+            _mm_store_ps(sum_elems, partial_sum);
+            
+            float sum = sum_elems[3] + sum_elems[2] + sum_elems[1] + sum_elems[0];
+            for(int k = lncol - cant_process; k < lncol; k++){
                 sum += left(i, k) * right(k, j);
             }
+
             result(i, j) = sum;
         } 
     }
+
+    //printf("\n\n\n");
 
     return result;
 }
