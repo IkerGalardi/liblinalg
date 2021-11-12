@@ -1,5 +1,9 @@
 #pragma once 
 
+/*
+ * Returns true if both matrix are equal. If sizes or some element inside doesn't match
+ * false is returned.
+ */
 template<size_t lnrow, size_t lncol, size_t rnrow, size_t rncol>
 bool operator==(const matf<lnrow, lncol>& left, const matf<rnrow, rncol>& right) {
     // If matrices have no equal sizes they aren't equal
@@ -18,11 +22,19 @@ bool operator==(const matf<lnrow, lncol>& left, const matf<rnrow, rncol>& right)
     return true;
 }
 
+/*
+ * Opposite of the == operator. If sizes missmatch or an element doesn't match true is
+ * returned, else false is returned.
+ */
 template<size_t lnrow, size_t lncol, size_t rnrow, size_t rncol>
 bool operator!=(const matf<lnrow, lncol>& left, const matf<rnrow, rncol>& right) {
     return !(left == right);
 }
 
+/*
+ * Returns the addition of two matrices. If sizes don't match a compile time error is 
+ * thrown.
+ */
 template<size_t nrow, size_t ncol>
 matf<nrow, ncol> operator+(const matf<nrow, ncol>& left, const matf<nrow, ncol>& right) {
     matf<nrow, ncol> result;
@@ -48,6 +60,10 @@ matf<nrow, ncol> operator+(const matf<nrow, ncol>& left, const matf<nrow, ncol>&
     return result;
 }
 
+/*
+ * Returns the substraction of two matrices. If sizes don't match a compile time error is 
+ * thrown.
+ */
 template<size_t nrow, size_t ncol>
 matf<nrow, ncol> operator-(const matf<nrow, ncol>& left, const matf<nrow, ncol>& right) {
     matf<nrow, ncol> result;
@@ -73,6 +89,9 @@ matf<nrow, ncol> operator-(const matf<nrow, ncol>& left, const matf<nrow, ncol>&
     return result;
 }
 
+/*
+ * Returns the multiplication between a scalar and a matrix.
+ */
 template<size_t nrow, size_t ncol>
 matf<nrow, ncol> operator*(float scalar, const matf<nrow, ncol>& right) {
     matf<nrow, ncol> result;
@@ -98,6 +117,11 @@ matf<nrow, ncol> operator*(float scalar, const matf<nrow, ncol>& right) {
     return result;
 }
 
+/*
+ * Returns the multiplication between two matrices. If the number of columns of the left
+ * operand does not equal to the number of rows of the right operand a compile time error
+ * is thrown.
+ */
 template<size_t lnrow, size_t lncol, size_t rncol>
 matf<lnrow, rncol> operator*(const matf<lnrow, lncol>& left, 
                              const matf<lncol, rncol>& right) {

@@ -1,5 +1,10 @@
 #pragma once
 
+/*
+ * Performs the multiplication of two matrices, interpreting the vector as a column matrix.
+ * If the vector's element count doesn't match matrix's number of columns a compile time 
+ * error is thrown.
+ */
 template<size_t nrow, size_t ncol>
 vecf<nrow> operator*(const matf<nrow, ncol>& mat, const vecf<ncol>& vec) {
     vecf<nrow> result;
@@ -15,6 +20,11 @@ vecf<nrow> operator*(const matf<nrow, ncol>& mat, const vecf<ncol>& vec) {
     return result;
 }
 
+/*
+ * Performs the multiplication of two matrices, interpreting the vector as a row matrix.
+ * If the vector's element count doesn't match matrix's number of columns a compile time
+ * error is thrown.
+ */
 template<size_t nrow, size_t ncol>
 vecf<ncol> operator*(const vecf<ncol>& vec, const matf<nrow, ncol>& mat) {
     vecf<ncol> result;
