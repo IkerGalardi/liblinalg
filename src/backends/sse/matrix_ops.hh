@@ -132,7 +132,5 @@ matf<lnrow, rncol> operator*(const matf<lnrow, lncol>& left,
         } 
     }
 
-    //printf("\n\n\n");
-
     return result;
 }
