@@ -8,7 +8,10 @@
     #define LIBMATH_ALIGNMENT alignas(16) 
 #endif
 
+#include <cmath>
+
 #include "vector.hh"
+#include "matrix.hh"
 
 // Include the selected backend implementation
 #if defined(LIBMATH_BACKEND_SIMPLE_CPU)
