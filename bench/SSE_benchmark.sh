@@ -3,7 +3,7 @@
 COMPILATION_FLAGS="-msse4.1 -O2 -m64 -std=c++17"
 INCLUDE_FLAGS="-Isrc"
 
-echo "- Simple CPU benchmark:"
+echo "- Simple CPU results:"
 
 # Vector benchmark
 g++ $COMPILATION_FLAGS $INCLUDE_FLAGS -DLIBMATH_BACKEND_SIMPLE_CPU bench/src/vector_bench.cc -o bin/vector_bench
@@ -17,7 +17,7 @@ g++ $COMPILATION_FLAGS $INCLUDE_FLAGS -DLIBMATH_BACKEND_SIMPLE_CPU bench/src/mat
 g++ $COMPILATION_FLAGS $INCLUDE_FLAGS -DLIBMATH_BACKEND_SIMPLE_CPU bench/src/matrix_vector_bench.cc -o bin/matrix_vector_bench
 ./bin/matrix_vector_bench
 
-echo "- SSE benchmark:"
+echo "- SSE results:"
 
 # Vector benchmark
 g++ $COMPILATION_FLAGS $INCLUDE_FLAGS -DLIBMATH_BACKEND_SIMD_SSE bench/src/vector_bench.cc -o bin/vector_bench
