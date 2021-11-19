@@ -1,4 +1,4 @@
-# libmath
+# liblinalg
 Simple lineal algebra library to test different optimization techniques. **IMPORTANT**, this library is under heavy development.
 
 ## How to use
