@@ -24,7 +24,7 @@ g++ $COMPILATION_FLAGS $INCLUDE_FLAGS -DLIBMATH_BACKEND_SIMD_SSE bench/src/vecto
 ./bin/vector_bench
 
 # Matrix benchmark
-g++ $COMPILATION_FLAGS $INCLUDE_FLAGS -DLIBMATH_BACKEND_SIMD_SSE bench/src/matrix_bench.cc -o bin/vector_bench 2> /dev/null
+g++ $COMPILATION_FLAGS $INCLUDE_FLAGS -DLIBMATH_BACKEND_SIMD_SSE bench/src/matrix_bench.cc -o bin/matrix_bench 2> /dev/null
 ./bin/matrix_bench
 
 # Vector matrix benchmark
