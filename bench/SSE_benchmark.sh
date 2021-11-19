@@ -15,7 +15,7 @@ g++ $COMPILATION_FLAGS $INCLUDE_FLAGS -DLIBMATH_BACKEND_SIMPLE_CPU bench/src/mat
 
 # Vector matrix benchmark
 g++ $COMPILATION_FLAGS $INCLUDE_FLAGS -DLIBMATH_BACKEND_SIMPLE_CPU bench/src/matrix_vector_bench.cc -o bin/matrix_vector_bench 2> /dev/null
-#./bin/matrix_vector_bench
+./bin/matrix_vector_bench
 
 echo "- SSE results:"
 
@@ -29,4 +29,4 @@ g++ $COMPILATION_FLAGS $INCLUDE_FLAGS -DLIBMATH_BACKEND_SIMD_SSE bench/src/matri
 
 # Vector matrix benchmark
 g++ $COMPILATION_FLAGS $INCLUDE_FLAGS -DLIBMATH_BACKEND_SIMD_SSE bench/src/matrix_vector_bench.cc -o bin/matrix_vector_bench 2> /dev/null
-#./bin/matrix_vector_bench
+./bin/matrix_vector_bench
