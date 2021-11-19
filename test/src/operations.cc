@@ -140,6 +140,15 @@ void test_matrix_indexing() {
     assert((b(0, 3) == 4));
 }
 
+void test_matrix_deep_copies() {
+    matf<2, 2> a = {1, 2, 
+                    3, 4};
+    matf<2, 2> b = a;
+
+    b(0, 0) = 7;
+    assert((a(0, 0) == 1));
+}
+
 void test_matrix_comparisons() {
     matf<2, 2> a = {1, 2,
                     3, 2};
@@ -244,6 +253,7 @@ int main() {
     EXECUTE_TEST(test_vector_dotproduct);
     EXECUTE_TEST(test_vector_multiplication);
     EXECUTE_TEST(test_matrix_indexing);
+    EXECUTE_TEST(test_matrix_deep_copies);
     EXECUTE_TEST(test_matrix_comparisons);
     EXECUTE_TEST(test_matrix_addition);
     EXECUTE_TEST(test_matrix_multiplication);
