@@ -39,6 +39,14 @@ void test_vector_comparisons() {
     assert((c != d));
 }
 
+void test_vector_deep_copies() {
+    vecf<2> a = {1, 2};
+    auto b = a;
+
+    b.data[0] = 7;
+    assert((a.data[0]) == 1);
+}
+
 void test_vector_addition() {
     vecf<6> a = {1, 2, 3, 1, 2, 3};
     vecf<6> b = {1, 2, 3, 1, 2, 3};
@@ -140,6 +148,15 @@ void test_matrix_indexing() {
     assert((b(0, 3) == 4));
 }
 
+void test_matrix_deep_copies() {
+    matf<2, 2> a = {1, 2, 
+                    3, 4};
+    matf<2, 2> b = a;
+
+    b(0, 0) = 7;
+    assert((a(0, 0) == 1));
+}
+
 void test_matrix_comparisons() {
     matf<2, 2> a = {1, 2,
                     3, 2};
@@ -238,12 +255,14 @@ void test_matrix_vector_multiplication() {
 
 int main() {
     EXECUTE_TEST(test_vector_comparisons);
+    EXECUTE_TEST(test_vector_deep_copies);
     EXECUTE_TEST(test_vector_addition);
     EXECUTE_TEST(test_vector_substraction);
     EXECUTE_TEST(test_vector_length);
     EXECUTE_TEST(test_vector_dotproduct);
     EXECUTE_TEST(test_vector_multiplication);
     EXECUTE_TEST(test_matrix_indexing);
+    EXECUTE_TEST(test_matrix_deep_copies);
     EXECUTE_TEST(test_matrix_comparisons);
     EXECUTE_TEST(test_matrix_addition);
     EXECUTE_TEST(test_matrix_multiplication);
