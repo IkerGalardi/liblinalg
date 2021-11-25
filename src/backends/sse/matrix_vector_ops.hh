@@ -9,7 +9,7 @@ template<size_t nrow, size_t ncol>
 vecf<nrow> operator*(const matf<nrow, ncol>& mat, const vecf<ncol>& vec) {
     vecf<nrow> result;
     for(int i = 0; i < nrow; i++) {
-        constexpr int cant_process = ncol % LIBMATH_PARALLEL_FLOATS;
+        constexpr int cant_process = ncol % LIBLINALG_PARALLEL_FLOATS;
 
         // Process as much elements with SIMD instructions.
         __m128 partial_sum = _mm_setzero_ps();
@@ -45,7 +45,7 @@ template<size_t nrow, size_t ncol>
 vecf<ncol> operator*(const vecf<ncol>& vec, const matf<nrow, ncol>& mat) {
     vecf<ncol> result;
     for(int i = 0; i < ncol; i++) {
-        constexpr int cant_process = nrow & LIBMATH_PARALLEL_FLOATS;
+        constexpr int cant_process = nrow & LIBLINALG_PARALLEL_FLOATS;
 
         // Process as much elements with SIMD instructions.
         __m128 vec_elem = _mm_set1_ps(vec.data[i]);

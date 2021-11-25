@@ -3,7 +3,7 @@
 #include <chrono>
 #include <vector>
 
-#include "libmath.hh"
+#include "liblinalg.hh"
 
 int main(int argc, char** argv) {
     constexpr uint64_t size = 700;

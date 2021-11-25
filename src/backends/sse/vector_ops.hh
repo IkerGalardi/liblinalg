@@ -8,7 +8,7 @@ template<size_t size>
 float length_squared(const vecf<size>& vec) {
     // Maybe not all the elements can be executed using SSE2 instructions, so we see 
     // beforehand how many can be executed in parallel and how many serially.
-    constexpr int left_after_parallel = size % LIBMATH_PARALLEL_FLOATS;
+    constexpr int left_after_parallel = size % LIBLINALG_PARALLEL_FLOATS;
     constexpr int parallel_iterations = size - left_after_parallel;
 
     // TODO: test to see when to start parallel implementation and when simply
@@ -49,7 +49,7 @@ template<size_t size>
 float dot(const vecf<size>& left, const vecf<size>& right) {
     // Maybe not all the elements can be executed using SSE2 instructions, so we see 
     // beforehand how many can be executed in parallel and how many serially.
-    constexpr int left_after_parallel = size % LIBMATH_PARALLEL_FLOATS;
+    constexpr int left_after_parallel = size % LIBLINALG_PARALLEL_FLOATS;
     constexpr int parallel_iterations = size - left_after_parallel;
 
     // TODO: test to see when to start parallel implementation and when simply
@@ -84,7 +84,7 @@ template<size_t size>
 vecf<size> operator+(const vecf<size>& left, const vecf<size>& right) {
     // Maybe not all the elements can be executed using SSE2 instructions, so we see 
     // beforehand how many can be executed in parallel and how many serially.
-    constexpr int left_after_parallel = size % LIBMATH_PARALLEL_FLOATS;
+    constexpr int left_after_parallel = size % LIBLINALG_PARALLEL_FLOATS;
     constexpr int parallel_iterations = size - left_after_parallel;
 
     vecf<size> result;
@@ -113,7 +113,7 @@ template<size_t size>
 vecf<size> operator-(const vecf<size>& left, const vecf<size>& right) {
     // Maybe not all the elements can be executed using SSE2 instructions, so we see 
     // beforehand how many can be executed in parallel and how many serially.
-    constexpr int left_after_parallel = size % LIBMATH_PARALLEL_FLOATS;
+    constexpr int left_after_parallel = size % LIBLINALG_PARALLEL_FLOATS;
     constexpr int parallel_iterations = size - left_after_parallel;
 
     vecf<size> result;
@@ -142,7 +142,7 @@ template<size_t size>
 vecf<size> operator*(const vecf<size>& left, const vecf<size>& right) {
     // Maybe not all the elements can be executed using SSE2 instructions, so we see 
     // beforehand how many can be executed in parallel and how many serially.
-    constexpr int left_after_parallel = size % LIBMATH_PARALLEL_FLOATS;
+    constexpr int left_after_parallel = size % LIBLINALG_PARALLEL_FLOATS;
     constexpr int parallel_iterations = size - left_after_parallel;
 
     vecf<size> result;
@@ -171,7 +171,7 @@ template<size_t size>
 vecf<size> operator*(float scalar, const vecf<size>& right) {
     // Maybe not all the elements can be executed using SSE2 instructions, so we see 
     // beforehand how many can be executed in parallel and how many serially.
-    constexpr int left_after_parallel = size % LIBMATH_PARALLEL_FLOATS;
+    constexpr int left_after_parallel = size % LIBLINALG_PARALLEL_FLOATS;
     constexpr int parallel_iterations = size - left_after_parallel;
 
     vecf<size> result;

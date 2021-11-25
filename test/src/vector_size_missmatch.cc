@@ -1,4 +1,4 @@
-#include <libmath.hh>
+#include <liblinalg.hh>
 
 int main() {
     vecf<3> a = {1, 2, 3};
