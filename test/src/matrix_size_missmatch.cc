@@ -1,4 +1,4 @@
-#include <libmath.hh>
+#include <liblinalg.hh>
 
 int main() {
     matf<2, 2> a = {1, 2, 

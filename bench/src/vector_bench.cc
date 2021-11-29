@@ -2,7 +2,7 @@
 #include <chrono>
 #include <vector>
 
-#include "libmath.hh"
+#include "liblinalg.hh"
 
 int main(int argc, char** argv) {
     constexpr uint64_t vector_size = 100000;

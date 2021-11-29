@@ -41,7 +41,7 @@ matf<nrow, ncol> operator+(const matf<nrow, ncol>& left, const matf<nrow, ncol>&
 
     // Not all elements can be processed in parallel, so we calculate how much
     // we need to do in serie.
-    constexpr int cant_process = ncol % LIBMATH_PARALLEL_FLOATS;
+    constexpr int cant_process = ncol % LIBLINALG_PARALLEL_FLOATS;
 
     // Process as much elements with SIMD instructions.
     for(int i = 0; i < nrow; i++) {
@@ -72,7 +72,7 @@ matf<nrow, ncol> operator-(const matf<nrow, ncol>& left, const matf<nrow, ncol>&
 
     // Not all elements can be processed in parallel, so we calculate how much
     // we need to do in serie.
-    constexpr int cant_process = ncol % LIBMATH_PARALLEL_FLOATS;
+    constexpr int cant_process = ncol % LIBLINALG_PARALLEL_FLOATS;
 
     // Process as much elements with SIMD instructions.
     for(int i = 0; i < nrow; i++) {
@@ -102,7 +102,7 @@ matf<nrow, ncol> operator*(float scalar, const matf<nrow, ncol>& right) {
 
     // Not all elements can be processed in parallel, so we calculate how much
     // we need to do in serie.
-    constexpr int cant_process = ncol % LIBMATH_PARALLEL_FLOATS;
+    constexpr int cant_process = ncol % LIBLINALG_PARALLEL_FLOATS;
 
     // Process as much elements with SIMD instructions.
     __m128 vec_scalar = _mm_set1_ps(scalar);
@@ -135,7 +135,7 @@ matf<lnrow, rncol> operator*(const matf<lnrow, lncol>& left,
 
     for(int i = 0; i < lnrow; i++) {
         for(int j = 0; j < rncol; j++) {
-            constexpr int cant_process = lncol % LIBMATH_PARALLEL_FLOATS;
+            constexpr int cant_process = lncol % LIBLINALG_PARALLEL_FLOATS;
             
             // Process as much elements as possible using SIMD instructions.
             __m128 partial_sum = _mm_setzero_ps();

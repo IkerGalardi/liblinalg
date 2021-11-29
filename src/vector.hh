@@ -2,6 +2,6 @@
 
 
 template<size_t size>
-struct LIBMATH_ALIGNMENT vecf {
+struct LIBLINALG_ALIGNMENT vecf {
     float data[size];
 };
