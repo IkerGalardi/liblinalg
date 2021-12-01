@@ -11,19 +11,16 @@ float length_squared(const vecf<size>& vec) {
     constexpr int left_after_parallel = size % LIBLINALG_PARALLEL_FLOATS;
     constexpr int parallel_iterations = size - left_after_parallel;
 
-    // TODO: test to see when to start parallel implementation and when simply
-    //       use a for loop, maybe using the vector extensions to add two vectors
-    //       and add horizontally is slower.
-    __m128 partial_sum = _mm_setzero_ps();
+    __m256 partial_sum = _mm256_setzero_ps();
     for(int i = 0; i < parallel_iterations; i += 4) {
-        __m128 elems = _mm_load_ps(vec.data + i);
-        __m128 elems_squared = _mm_mul_ps(elems, elems);
-        partial_sum = _mm_add_ps(partial_sum, elems_squared);
+        __m256 elems = _mm256_load_ps(vec.data + i);
+        __m256 elems_squared = _mm256_mul_ps(elems, elems);
+        partial_sum = _mm256_add_ps(partial_sum, elems_squared);
     }
 
     // TODO: try using horizontal adds
     alignas(16) float result[4];
-    _mm_store_ps(result, partial_sum);
+    _mm256_store_ps(result, partial_sum);
     float sum = result[0] + result[1] + result[2] + result[3];
 
     // Process all the elements left
@@ -55,17 +52,17 @@ float dot(const vecf<size>& left, const vecf<size>& right) {
     // TODO: test to see when to start parallel implementation and when simply
     //       use a for loop, maybe using the vector extensions to add two vectors
     //       and add horizontally is slower.
-    __m128 partial_sum = _mm_setzero_ps();
+    __m256 partial_sum = _mm256_setzero_ps();
     for(int i = 0; i < parallel_iterations; i += 4) {
-        __m128 left_elems = _mm_load_ps(left.data + i);
-        __m128 right_elems = _mm_load_ps(right.data + i);
-        __m128 multiplied = _mm_mul_ps(right_elems, left_elems);
-        partial_sum = _mm_add_ps(partial_sum, multiplied);
+        __m256 left_elems = _mm256_load_ps(left.data + i);
+        __m256 right_elems = _mm256_load_ps(right.data + i);
+        __m256 multiplied = _mm256_mul_ps(right_elems, left_elems);
+        partial_sum = _mm256_add_ps(partial_sum, multiplied);
     }
 
     // TODO: try using horizontal adds
     alignas(16) float result[4];
-    _mm_store_ps(result, partial_sum);
+    _mm256_store_ps(result, partial_sum);
     float sum = result[0] + result[1] + result[2] + result[3];
 
     // Process all the elements left
@@ -91,10 +88,10 @@ vecf<size> operator+(const vecf<size>& left, const vecf<size>& right) {
 
     // Process in elements using SSE2 instructions
     for(int i = 0; i < parallel_iterations; i += 4) {
-        __m128 left_elem = _mm_load_ps(left.data + i);
-        __m128 right_elem = _mm_load_ps(left.data + i);
-        __m128 res_elem = _mm_add_ps(left_elem, right_elem);
-        _mm_store_ps(result.data + i, res_elem);
+        __m256 left_elem = _mm256_load_ps(left.data + i);
+        __m256 right_elem = _mm256_load_ps(left.data + i);
+        __m256 res_elem = _mm256_add_ps(left_elem, right_elem);
+        _mm256_store_ps(result.data + i, res_elem);
     }
 
     // Process all the elements left
@@ -120,10 +117,10 @@ vecf<size> operator-(const vecf<size>& left, const vecf<size>& right) {
 
     // Process in elements using SSE2 instructions
     for(int i = 0; i < parallel_iterations; i += 4) {
-        __m128 left_elem = _mm_load_ps(left.data + i);
-        __m128 right_elem = _mm_load_ps(right.data + i);
-        __m128 res_elem = _mm_sub_ps(left_elem, right_elem);
-        _mm_store_ps(result.data + i, res_elem);
+        __m256 left_elem = _mm256_load_ps(left.data + i);
+        __m256 right_elem = _mm256_load_ps(right.data + i);
+        __m256 res_elem = _mm256_sub_ps(left_elem, right_elem);
+        _mm256_store_ps(result.data + i, res_elem);
     }
 
     // Process all the elements left
@@ -149,10 +146,10 @@ vecf<size> operator*(const vecf<size>& left, const vecf<size>& right) {
 
     // Process in elements using SSE2 instructions
     for(int i = 0; i < parallel_iterations; i += 4) {
-        __m128 left_elem = _mm_load_ps(left.data + i);
-        __m128 right_elem = _mm_load_ps(right.data + i);
-        __m128 res_elem = _mm_mul_ps(left_elem, right_elem);
-        _mm_store_ps(result.data + i, res_elem);
+        __m256 left_elem = _mm256_load_ps(left.data + i);
+        __m256 right_elem = _mm256_load_ps(right.data + i);
+        __m256 res_elem = _mm256_mul_ps(left_elem, right_elem);
+        _mm256_store_ps(result.data + i, res_elem);
     }
 
     // Process all the elements left
@@ -169,7 +166,7 @@ vecf<size> operator*(const vecf<size>& left, const vecf<size>& right) {
  */
 template<size_t size>
 vecf<size> operator*(float scalar, const vecf<size>& right) {
-    // Maybe not all the elements can be executed using SSE2 instructions, so we see 
+    // Maybe not all the elements can be executed using AVX instructions, so we see 
     // beforehand how many can be executed in parallel and how many serially.
     constexpr int left_after_parallel = size % LIBLINALG_PARALLEL_FLOATS;
     constexpr int parallel_iterations = size - left_after_parallel;
@@ -177,11 +174,11 @@ vecf<size> operator*(float scalar, const vecf<size>& right) {
     vecf<size> result;
 
     // Process in elements using SSE2 instructions
-    __m128 scalar_vectorized = _mm_set1_ps(scalar);
+    __m256 scalar_vectorized = _mm256_set1_ps(scalar);
     for(int i = 0; i < parallel_iterations; i += 4) {
-        __m128 right_elem = _mm_load_ps(right.data + i);
-        __m128 res_elem = _mm_mul_ps(scalar_vectorized, right_elem);
-        _mm_store_ps(result.data + i, res_elem);
+        __m256 right_elem = _mm256_load_ps(right.data + i);
+        __m256 res_elem = _mm256_mul_ps(scalar_vectorized, right_elem);
+        _mm256_store_ps(result.data + i, res_elem);
     }
 
     // Process all the elements left

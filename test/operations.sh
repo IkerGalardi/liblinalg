@@ -13,5 +13,5 @@ g++ $COMPILATION_FLAGS $INCLUDE_FLAGS -DLIBLINALG_BACKEND_SIMD_SSE test/src/oper
 ./bin/operations
 
 echo "AVX2 backend:"
-g++ $COMPILATION_FLAGS $INCLUDE_FLAGS -DLIBLINALG_BACKEND_SIMD_AVX2 test/src/operations.cc -o bin/operations
+g++ $COMPILATION_FLAGS $INCLUDE_FLAGS -DLIBLINALG_BACKEND_SIMD_AVX2 -mavx2 test/src/operations.cc -o bin/operations
 ./bin/operations
