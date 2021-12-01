@@ -18,7 +18,7 @@ float length_squared(const vecf<size>& vec) {
         partial_sum = _mm256_add_ps(partial_sum, elems_squared);
     }
 
-    // TODO: try using horizontal adds
+    // TODO: fix this, don't know why it even works
     alignas(16) float result[4];
     _mm256_store_ps(result, partial_sum);
     float sum = result[0] + result[1] + result[2] + result[3];
@@ -27,6 +27,8 @@ float length_squared(const vecf<size>& vec) {
     for(int i = parallel_iterations; i < size; i++) {
         sum += vec.data[i] * vec.data[i];
     }
+
+    printf("ola");
 
     return sum;
 }

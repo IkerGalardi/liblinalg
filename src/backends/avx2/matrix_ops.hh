@@ -46,10 +46,10 @@ matf<nrow, ncol> operator+(const matf<nrow, ncol>& left, const matf<nrow, ncol>&
     // Process as much elements with SIMD instructions.
     for(int i = 0; i < nrow; i++) {
         for(int j = 0; j < ncol - cant_process; j+=LIBLINALG_PARALLEL_FLOATS) {
-            __m128 elems_left = _mm_loadu_ps(left.data + i * ncol + j);
-            __m128 elems_right = _mm_loadu_ps(right.data + i * ncol + j);
-            __m128 summed = _mm_add_ps(elems_left, elems_right);
-            _mm_storeu_ps(result.data + i * ncol + j, summed);
+            __m256 elems_left = _mm256_loadu_ps(left.data + i * ncol + j);
+            __m256 elems_right = _mm256_loadu_ps(right.data + i * ncol + j);
+            __m256 summed = _mm256_add_ps(elems_left, elems_right);
+            _mm256_storeu_ps(result.data + i * ncol + j, summed);
         }
         
         // Some elements couldn't be processed in parallel, process them now
@@ -77,10 +77,10 @@ matf<nrow, ncol> operator-(const matf<nrow, ncol>& left, const matf<nrow, ncol>&
     // Process as much elements with SIMD instructions.
     for(int i = 0; i < nrow; i++) {
         for(int j = 0; j < ncol - cant_process; j+=LIBLINALG_PARALLEL_FLOATS) {
-            __m128 elems_left = _mm_loadu_ps(left.data + i * ncol + j);
-            __m128 elems_right = _mm_loadu_ps(right.data + i * ncol + j);
-            __m128 subed = _mm_sub_ps(elems_left, elems_right);
-            _mm_storeu_ps(result.data + i * ncol + j, subed);
+            __m256 elems_left = _mm256_loadu_ps(left.data + i * ncol + j);
+            __m256 elems_right = _mm256_loadu_ps(right.data + i * ncol + j);
+            __m256 subed = _mm256_sub_ps(elems_left, elems_right);
+            _mm256_storeu_ps(result.data + i * ncol + j, subed);
         }
         
         // Some elements couldn't be processed in parallel, process them now
@@ -105,12 +105,12 @@ matf<nrow, ncol> operator*(float scalar, const matf<nrow, ncol>& right) {
     constexpr int cant_process = ncol % LIBLINALG_PARALLEL_FLOATS;
 
     // Process as much elements with SIMD instructions.
-    __m128 vec_scalar = _mm_set1_ps(scalar);
+    __m256 vec_scalar = _mm256_set1_ps(scalar);
     for(int i = 0; i < nrow; i++) {
         for(int j = 0; j < ncol - cant_process; j+=LIBLINALG_PARALLEL_FLOATS) {
-            __m128 elems_right = _mm_loadu_ps(right.data + i * ncol + j);
-            __m128 muled = _mm_mul_ps(vec_scalar, elems_right);
-            _mm_storeu_ps(result.data + i * ncol + j, muled);
+            __m256 elems_right = _mm256_loadu_ps(right.data + i * ncol + j);
+            __m256 muled = _mm256_mul_ps(vec_scalar, elems_right);
+            _mm256_storeu_ps(result.data + i * ncol + j, muled);
         }
         
         // Some elements couldn't be processed in parallel, process them now
