@@ -11,3 +11,7 @@ g++ $COMPILATION_FLAGS $INCLUDE_FLAGS -DLIBLINALG_BACKEND_SIMPLE_CPU test/src/op
 echo "SSE backend:"
 g++ $COMPILATION_FLAGS $INCLUDE_FLAGS -DLIBLINALG_BACKEND_SIMD_SSE test/src/operations.cc -o bin/operations
 ./bin/operations
+
+echo "AVX2 backend:"
+g++ $COMPILATION_FLAGS $INCLUDE_FLAGS -DLIBLINALG_BACKEND_SIMD_AVX2 test/src/operations.cc -o bin/operations
+./bin/operations
