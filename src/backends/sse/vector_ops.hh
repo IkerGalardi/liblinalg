@@ -22,9 +22,12 @@ float length_squared(const vecf<size>& vec) {
     }
 
     // TODO: try using horizontal adds
-    alignas(16) float result[4];
-    _mm_store_ps(result, partial_sum);
-    float sum = result[0] + result[1] + result[2] + result[3];
+    LIBLINALG_ALIGNMENT float sum_elems[LIBLINALG_PARALLEL_FLOATS];
+    _mm_store_ps(sum_elems, partial_sum);
+    float sum = 0;
+    for(int i = 0; i < LIBLINALG_PARALLEL_FLOATS; i++) {
+        sum += sum_elems[i];
+    }
 
     // Process all the elements left
     for(int i = parallel_iterations; i < size; i++) {
@@ -64,9 +67,12 @@ float dot(const vecf<size>& left, const vecf<size>& right) {
     }
 
     // TODO: try using horizontal adds
-    alignas(16) float result[4];
-    _mm_store_ps(result, partial_sum);
-    float sum = result[0] + result[1] + result[2] + result[3];
+    LIBLINALG_ALIGNMENT float sum_elems[LIBLINALG_PARALLEL_FLOATS];
+    _mm_store_ps(sum_elems, partial_sum);
+    float sum = 0;
+    for(int i = 0; i < LIBLINALG_PARALLEL_FLOATS; i++) {
+        sum += sum_elems[i];
+    }
 
     // Process all the elements left
     for(int i = parallel_iterations; i < size; i++) {

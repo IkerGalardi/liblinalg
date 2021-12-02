@@ -152,12 +152,15 @@ matf<lnrow, rncol> operator*(const matf<lnrow, lncol>& left,
             }
 
             // TODO: maybe a more efficient way of doing an hadd??
-            alignas(16) float sum_elems[4];
+            LIBLINALG_ALIGNMENT float sum_elems[LIBLINALG_PARALLEL_FLOATS];
             _mm_store_ps(sum_elems, partial_sum);
+            float sum = 0;
+            for(int i = 0; i < LIBLINALG_PARALLEL_FLOATS; i++) {
+                sum += sum_elems[i];
+            }
             
             // Some elements couldn't be processed in parallel, process them now
             // in serie.
-            float sum = sum_elems[3] + sum_elems[2] + sum_elems[1] + sum_elems[0];
             for(int k = lncol - cant_process; k < lncol; k++){
                 sum += left(i, k) * right(k, j);
             }
