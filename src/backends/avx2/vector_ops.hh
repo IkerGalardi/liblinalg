@@ -53,9 +53,6 @@ float dot(const vecf<size>& left, const vecf<size>& right) {
     constexpr int left_after_parallel = size % LIBLINALG_PARALLEL_FLOATS;
     constexpr int parallel_iterations = size - left_after_parallel;
 
-    // TODO: test to see when to start parallel implementation and when simply
-    //       use a for loop, maybe using the vector extensions to add two vectors
-    //       and add horizontally is slower.
     __m256 partial_sum = _mm256_setzero_ps();
     for(int i = 0; i < parallel_iterations; i += LIBLINALG_PARALLEL_FLOATS) {
         __m256 left_elems = _mm256_load_ps(left.data + i);
