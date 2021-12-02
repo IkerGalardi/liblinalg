@@ -6,22 +6,26 @@
  */
 template<size_t size>
 float length_squared(const vecf<size>& vec) {
-    // Maybe not all the elements can be executed using SSE2 instructions, so we see 
+    // Maybe not all the elements can be executed using AVX2 instructions, so we see 
     // beforehand how many can be executed in parallel and how many serially.
     constexpr int left_after_parallel = size % LIBLINALG_PARALLEL_FLOATS;
     constexpr int parallel_iterations = size - left_after_parallel;
 
     __m256 partial_sum = _mm256_setzero_ps();
-    for(int i = 0; i < parallel_iterations; i += 4) {
+    for(int i = 0; i < parallel_iterations; i += LIBLINALG_PARALLEL_FLOATS) {
         __m256 elems = _mm256_load_ps(vec.data + i);
         __m256 elems_squared = _mm256_mul_ps(elems, elems);
         partial_sum = _mm256_add_ps(partial_sum, elems_squared);
     }
 
     // TODO: fix this, don't know why it even works
-    alignas(16) float result[4];
+    LIBLINALG_ALIGNMENT float result[LIBLINALG_PARALLEL_FLOATS] = {0, };
     _mm256_store_ps(result, partial_sum);
-    float sum = result[0] + result[1] + result[2] + result[3];
+    float sum = 0;
+    for(int i = 0; i < LIBLINALG_PARALLEL_FLOATS; i++) {
+        sum += result[i];
+    }
+
 
     // Process all the elements left
     for(int i = parallel_iterations; i < size; i++) {
