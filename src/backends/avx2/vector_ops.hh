@@ -28,8 +28,6 @@ float length_squared(const vecf<size>& vec) {
         sum += vec.data[i] * vec.data[i];
     }
 
-    printf("ola");
-
     return sum;
 }
 
