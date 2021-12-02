@@ -48,7 +48,7 @@ float length(const vecf<size>& vec) {
  */
 template<size_t size>
 float dot(const vecf<size>& left, const vecf<size>& right) {
-    // Maybe not all the elements can be executed using SSE2 instructions, so we see 
+    // Maybe not all the elements can be executed using AVX2 instructions, so we see 
     // beforehand how many can be executed in parallel and how many serially.
     constexpr int left_after_parallel = size % LIBLINALG_PARALLEL_FLOATS;
     constexpr int parallel_iterations = size - left_after_parallel;
@@ -57,7 +57,7 @@ float dot(const vecf<size>& left, const vecf<size>& right) {
     //       use a for loop, maybe using the vector extensions to add two vectors
     //       and add horizontally is slower.
     __m256 partial_sum = _mm256_setzero_ps();
-    for(int i = 0; i < parallel_iterations; i += 4) {
+    for(int i = 0; i < parallel_iterations; i += LIBLINALG_PARALLEL_FLOATS) {
         __m256 left_elems = _mm256_load_ps(left.data + i);
         __m256 right_elems = _mm256_load_ps(right.data + i);
         __m256 multiplied = _mm256_mul_ps(right_elems, left_elems);
@@ -65,9 +65,12 @@ float dot(const vecf<size>& left, const vecf<size>& right) {
     }
 
     // TODO: try using horizontal adds
-    alignas(16) float result[4];
+    LIBLINALG_ALIGNMENT float result[LIBLINALG_PARALLEL_FLOATS];
     _mm256_store_ps(result, partial_sum);
-    float sum = result[0] + result[1] + result[2] + result[3];
+    float sum = 0;
+    for(int i = 0; i < LIBLINALG_PARALLEL_FLOATS; i++) {
+        sum += result[i];
+    }
 
     // Process all the elements left
     for(int i = parallel_iterations; i < size; i++) {
@@ -83,15 +86,15 @@ float dot(const vecf<size>& left, const vecf<size>& right) {
  */
 template<size_t size>
 vecf<size> operator+(const vecf<size>& left, const vecf<size>& right) {
-    // Maybe not all the elements can be executed using SSE2 instructions, so we see 
+    // Maybe not all the elements can be executed using AVX2 instructions, so we see 
     // beforehand how many can be executed in parallel and how many serially.
     constexpr int left_after_parallel = size % LIBLINALG_PARALLEL_FLOATS;
     constexpr int parallel_iterations = size - left_after_parallel;
 
     vecf<size> result;
 
-    // Process in elements using SSE2 instructions
-    for(int i = 0; i < parallel_iterations; i += 4) {
+    // Process in elements using AVX2 instructions
+    for(int i = 0; i < parallel_iterations; i += LIBLINALG_PARALLEL_FLOATS) {
         __m256 left_elem = _mm256_load_ps(left.data + i);
         __m256 right_elem = _mm256_load_ps(left.data + i);
         __m256 res_elem = _mm256_add_ps(left_elem, right_elem);
@@ -112,15 +115,15 @@ vecf<size> operator+(const vecf<size>& left, const vecf<size>& right) {
  */
 template<size_t size>
 vecf<size> operator-(const vecf<size>& left, const vecf<size>& right) {
-    // Maybe not all the elements can be executed using SSE2 instructions, so we see 
+    // Maybe not all the elements can be executed using AVX2 instructions, so we see 
     // beforehand how many can be executed in parallel and how many serially.
     constexpr int left_after_parallel = size % LIBLINALG_PARALLEL_FLOATS;
     constexpr int parallel_iterations = size - left_after_parallel;
 
     vecf<size> result;
 
-    // Process in elements using SSE2 instructions
-    for(int i = 0; i < parallel_iterations; i += 4) {
+    // Process in elements using AVX2 instructions
+    for(int i = 0; i < parallel_iterations; i += LIBLINALG_PARALLEL_FLOATS) {
         __m256 left_elem = _mm256_load_ps(left.data + i);
         __m256 right_elem = _mm256_load_ps(right.data + i);
         __m256 res_elem = _mm256_sub_ps(left_elem, right_elem);
@@ -141,15 +144,15 @@ vecf<size> operator-(const vecf<size>& left, const vecf<size>& right) {
  */
 template<size_t size>
 vecf<size> operator*(const vecf<size>& left, const vecf<size>& right) {
-    // Maybe not all the elements can be executed using SSE2 instructions, so we see 
+    // Maybe not all the elements can be executed using AVX2 instructions, so we see 
     // beforehand how many can be executed in parallel and how many serially.
     constexpr int left_after_parallel = size % LIBLINALG_PARALLEL_FLOATS;
     constexpr int parallel_iterations = size - left_after_parallel;
 
     vecf<size> result;
 
-    // Process in elements using SSE2 instructions
-    for(int i = 0; i < parallel_iterations; i += 4) {
+    // Process in elements using AVX2 instructions
+    for(int i = 0; i < parallel_iterations; i += LIBLINALG_PARALLEL_FLOATS) {
         __m256 left_elem = _mm256_load_ps(left.data + i);
         __m256 right_elem = _mm256_load_ps(right.data + i);
         __m256 res_elem = _mm256_mul_ps(left_elem, right_elem);
@@ -170,16 +173,16 @@ vecf<size> operator*(const vecf<size>& left, const vecf<size>& right) {
  */
 template<size_t size>
 vecf<size> operator*(float scalar, const vecf<size>& right) {
-    // Maybe not all the elements can be executed using AVX instructions, so we see 
+    // Maybe not all the elements can be executed using AVX2 instructions, so we see 
     // beforehand how many can be executed in parallel and how many serially.
     constexpr int left_after_parallel = size % LIBLINALG_PARALLEL_FLOATS;
     constexpr int parallel_iterations = size - left_after_parallel;
 
     vecf<size> result;
 
-    // Process in elements using SSE2 instructions
+    // Process in elements using AVX2 instructions
     __m256 scalar_vectorized = _mm256_set1_ps(scalar);
-    for(int i = 0; i < parallel_iterations; i += 4) {
+    for(int i = 0; i < parallel_iterations; i += LIBLINALG_PARALLEL_FLOATS) {
         __m256 right_elem = _mm256_load_ps(right.data + i);
         __m256 res_elem = _mm256_mul_ps(scalar_vectorized, right_elem);
         _mm256_store_ps(result.data + i, res_elem);
