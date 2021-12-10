@@ -143,7 +143,7 @@ matf<lnrow, rncol> operator*(const matf<lnrow, lncol>& left,
             for(int k = 0; k < lncol - cant_process; k+=LIBLINALG_PARALLEL_FLOATS) {
                 __m256 left_elems = _mm256_loadu_ps(left.data + i * lncol + k);
 
-                __m256 right_col_elems = _mm256_i32gather_ps(right.data + k * rncol + j, vindex, 8);
+                __m256 right_col_elems = _mm256_i32gather_ps(right.data + k * rncol + j, vindex, 1);
                 __m256 multiplied = _mm256_mul_ps(left_elems, right_col_elems);
                 partial_sum = _mm256_add_ps(partial_sum, multiplied);
             }
