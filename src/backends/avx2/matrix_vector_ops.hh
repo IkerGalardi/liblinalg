@@ -12,17 +12,20 @@ vecf<nrow> operator*(const matf<nrow, ncol>& mat, const vecf<ncol>& vec) {
         constexpr int cant_process = ncol % LIBLINALG_PARALLEL_FLOATS;
 
         // Process as much elements with SIMD instructions.
-        __m128 partial_sum = _mm_setzero_ps();
+        __m256 partial_sum = _mm256_setzero_ps();
         for(int j = 0; j < ncol - cant_process; j+=LIBLINALG_PARALLEL_FLOATS) {
-            __m128 vec_elems = _mm_load_ps(vec.data + j);
-            __m128 mat_elems = _mm_loadu_ps(mat.data + i * nrow + j);
-            __m128 multiplied = _mm_mul_ps(vec_elems, mat_elems);
-            partial_sum = _mm_add_ps(partial_sum, multiplied);
+            __m256 vec_elems = _mm256_load_ps(vec.data + j);
+            __m256 mat_elems = _mm256_loadu_ps(mat.data + i * nrow + j);
+            __m256 multiplied = _mm256_mul_ps(vec_elems, mat_elems);
+            partial_sum = _mm256_add_ps(partial_sum, multiplied);
         }
 
-        alignas(16) float sum_elems[4];
-        _mm_store_ps(sum_elems, partial_sum);
-        float sum = sum_elems[3] + sum_elems[2] + sum_elems[1] + sum_elems[0];
+        LIBLINALG_ALIGNMENT float sum_elems[LIBLINALG_PARALLEL_FLOATS];
+        _mm256_store_ps(sum_elems, partial_sum);
+        float sum = 0;
+        for(int i = 0; i < LIBLINALG_PARALLEL_FLOATS; i++) {
+            sum += sum_elems[i];
+        }
 
         // Some elements couldn't be processed in parallel, process them now
         // in serie.
@@ -48,20 +51,23 @@ vecf<ncol> operator*(const vecf<ncol>& vec, const matf<nrow, ncol>& mat) {
         constexpr int cant_process = nrow & LIBLINALG_PARALLEL_FLOATS;
 
         // Process as much elements with SIMD instructions.
-        __m128 vec_elem = _mm_set1_ps(vec.data[i]);
-        __m128 partial_sum = _mm_setzero_ps();
+        __m256 vec_elem = _mm256_set1_ps(vec.data[i]);
+        __m256 partial_sum = _mm256_setzero_ps();
+        __m256i vindex = _mm256_set1_epi32(i * ncol);
         for(int j = 0; j < nrow - cant_process; j+=LIBLINALG_PARALLEL_FLOATS) {
             // TODO: check a faster way of doing this with sse.
-            __m128 mat_col_elems = _mm_set_ps(mat(j + 3, i), 
-                                              mat(j + 2, i),
-                                              mat(j + 1, i),
-                                              mat(j + 0, i));
-            __m128 multiplied = _mm_mul_ps(vec_elem, mat_col_elems);
-            partial_sum = _mm_add_ps(partial_sum, multiplied);
+            //__m256 mat_col_elems = _mm256_set_ps(mat(j + 3, i), 
+            //                                  mat(j + 2, i),
+            //                                  mat(j + 1, i),
+            //                                  mat(j + 0, i));
+            __m256 mat_col_elems = _mm256_i32gather_ps(mat.data + j * ncol + i, vindex, 8);
+
+            __m256 multiplied = _mm256_mul_ps(vec_elem, mat_col_elems);
+            partial_sum = _mm256_add_ps(partial_sum, multiplied);
         }
 
         LIBLINALG_ALIGNMENT float sum_elems[LIBLINALG_PARALLEL_FLOATS];
-        _mm_store_ps(sum_elems, partial_sum);
+        _mm256_store_ps(sum_elems, partial_sum);
         float sum = 0;
         for(int i = 0; i < LIBLINALG_PARALLEL_FLOATS; i++) {
             sum += sum_elems[i];
