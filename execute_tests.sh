@@ -1,8 +1,15 @@
 #!/bin/sh
 
+if [ $1 = "help" ] || [ -z $1 ]
+then
+    echo "A backend needs to be selected to test."
+    echo "Available options are SIMD_SSE and SIMPLE_CPU."
+    exit
+fi
+
 # Execute the operations test
 echo "- Operation correctness tests"
-sh test/operations.sh
+sh test/operations.sh $1
 echo ""
 
 # Execute vector size missmatch error test
