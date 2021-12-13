@@ -2,7 +2,7 @@
 
 if [ $1 = "help" ] || [ -z $1 ]
 then
-    echo "The script does not test anything by itself, thebackend to be tested needs to be specified"
+    echo "A backend needs to be selected to test."
     echo "Available options are SIMD_SSE and SIMPLE_CPU"
     exit
 else
