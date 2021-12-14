@@ -35,12 +35,15 @@ bool operator!=(const matf<lnrow, lncol>& left, const matf<rnrow, rncol>& right)
  * Returns the addition of two matrices. If sizes don't match a compile time error is 
  * thrown.
  */
-template<size_t nrow, size_t ncol>
-matf<nrow, ncol> operator+(const matf<nrow, ncol>& left, const matf<nrow, ncol>& right) {
-    matf<nrow, ncol> result;
+template<size_t lnrow, size_t lncol, size_t rnrow, size_t rncol>
+matf<lnrow, lncol> operator+(const matf<lnrow, lncol>& left, const matf<rnrow, rncol>& right) {
+    static_assert(lnrow == rnrow && lncol == rncol,
+                  "Matrix sizes are not equal");
 
-    for(int i = 0; i < nrow; i++) {
-        for(int j = 0; j < ncol; j++) {
+    matf<lnrow, lncol> result;
+
+    for(int i = 0; i < lnrow; i++) {
+        for(int j = 0; j < lncol; j++) {
             result(i, j) = left(i, j) + right(i, j);
         }
     }
@@ -52,12 +55,15 @@ matf<nrow, ncol> operator+(const matf<nrow, ncol>& left, const matf<nrow, ncol>&
  * Returns the substraction of two matrices. If sizes don't match a compile time error is 
  * thrown.
  */
-template<size_t nrow, size_t ncol>
-matf<nrow, ncol> operator-(const matf<nrow, ncol>& left, const matf<nrow, ncol>& right) {
-    matf<nrow, ncol> result;
+template<size_t lnrow, size_t lncol, size_t rnrow, size_t rncol>
+matf<lnrow, lncol> operator-(const matf<lnrow, lncol>& left, const matf<rnrow, rncol>& right) {
+    static_assert(lnrow == rnrow && lncol == rncol,
+                  "Matrix sizes are not equal");
 
-    for(int i = 0; i < nrow; i++) {
-        for(int j = 0; j < ncol; j++) {
+    matf<lnrow, lncol> result;
+
+    for(int i = 0; i < lnrow; i++) {
+        for(int j = 0; j < lncol; j++) {
             result(i, j) = left(i, j) - right(i, j);
         }
     }
@@ -86,9 +92,12 @@ matf<nrow, ncol> operator*(float scalar, const matf<nrow, ncol>& right) {
  * operand does not equal to the number of rows of the right operand a compile time error
  * is thrown.
  */
-template<size_t lnrow, size_t lncol, size_t rncol>
+template<size_t lnrow, size_t lncol, size_t rnrow, size_t rncol>
 matf<lnrow, rncol> operator*(const matf<lnrow, lncol>& left, 
-                             const matf<lncol, rncol>& right) {
+                             const matf<rnrow, rncol>& right) {
+    static_assert(rnrow == lncol, 
+                  "Left's number of columns does not equal to right's number or rows");
+
     matf<lnrow, rncol> result;
 
     for(int i = 0; i < lnrow; i++) {

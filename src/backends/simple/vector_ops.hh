@@ -25,10 +25,13 @@ float length(const vecf<size>& vec) {
 /*
  * Returns dot product of two vectors.
  */
-template<size_t size>
-float dot(const vecf<size>& left, const vecf<size>& right) {
+template<size_t size1, size_t size2>
+float dot(const vecf<size1>& left, const vecf<size2>& right) {
+    static_assert(size1 == size2,
+                  "Vector sizes dont match");
+
     float sum = 0.0;
-    for(int i = 0; i < size; i++) {
+    for(int i = 0; i < size1; i++) {
         sum += right.data[i] * left.data[i];
     }
 
@@ -39,10 +42,13 @@ float dot(const vecf<size>& left, const vecf<size>& right) {
  * Performs the addition between two vectors of equal size. If the sizes of the vectors don't
  * match a compilation error is thrown.
  */
-template<size_t size>
-vecf<size> operator+(const vecf<size>& left, const vecf<size>& right) {
-    vecf<size> result;
-    for(int i = 0; i < size; i++)
+template<size_t size1, size_t size2>
+vecf<size1> operator+(const vecf<size1>& left, const vecf<size2>& right) {
+    static_assert(size1 == size2,
+                  "Vector sizes dont match");
+
+    vecf<size1> result;
+    for(int i = 0; i < size1; i++)
         result.data[i] = left.data[i] + right.data[i];
 
     return result;
@@ -52,10 +58,13 @@ vecf<size> operator+(const vecf<size>& left, const vecf<size>& right) {
  * Performs the substraction between two vectors of equal size. If the sizes of the vectors 
  * don't match a compilation error is thrown.
  */
-template<size_t size>
-vecf<size> operator-(const vecf<size>& left, const vecf<size>& right) {
-    vecf<size> result;
-    for(int i = 0; i < size; i++)
+template<size_t size1, size_t size2>
+vecf<size1> operator-(const vecf<size1>& left, const vecf<size2>& right) {
+    static_assert(size1 == size2,
+                  "Vector sizes dont match");
+
+    vecf<size1> result;
+    for(int i = 0; i < size1; i++)
         result.data[i] = left.data[i] - right.data[i];
 
     return result;
@@ -91,10 +100,14 @@ vecf<size> operator*(float scalar, const vecf<size>& right) {
  * Compares the passed vectors. True is returned if both vectors are equal and false is returned
  * if the vectors are not equal.
  */
-template<size_t size>
-bool operator==(const vecf<size>& left, const vecf<size>& right) {
+template<size_t size1, size_t size2>
+bool operator==(const vecf<size1>& left, const vecf<size2>& right) {
+    // TODO: check if a compile time error or a compile time error should be thrown
+    if constexpr(size1 != size2)
+        return false;
+
     bool is_equal;
-    for(int i = 0; i < size; i++) {
+    for(int i = 0; i < size1; i++) {
         if(left.data[i] != right.data[i]) 
             return false;
     }
@@ -106,7 +119,7 @@ bool operator==(const vecf<size>& left, const vecf<size>& right) {
  * Compares the passed vectors. False is returned if both vectors are equal and true is returned
  * if the vectors are not equal.
  */
-template<size_t size>
-bool operator!=(const vecf<size>& left, const vecf<size>& right) {
+template<size_t size1, size_t size2>
+bool operator!=(const vecf<size1>& left, const vecf<size2>& right) {
     return !(left == right);
 }
