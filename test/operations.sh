@@ -9,7 +9,7 @@ else
     echo "Testing $1"
 fi
 
-COMPILATION_FLAGS="-msse4.1 -O2 -m64 -std=c++17"
+COMPILATION_FLAGS="-msse4.1 -mavx2 -O2 -m64 -std=c++17"
 INCLUDE_FLAGS="-Isrc"
 
 rm -f bin/operations
