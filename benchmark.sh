@@ -1,5 +1,12 @@
 #!/bin/sh
 
+if [ $1 = "help" ] || [ -z $1 ]                         
+then
+    echo "A backend needs to be selected to test."
+    echo "Available options are SIMD_SSE and SIMPLE_CPU."
+    exit                                                  
+fi
+
 COMPILATION_FLAGS="-msse4.1 -mavx2 -m64 -std=c++17"
 INCLUDE_FLAGS="-Isrc"
 
