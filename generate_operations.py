@@ -1,9 +1,10 @@
+#!/bin/python3
+
 import numpy as np
 import random
 
 OPERATIONS_PER_SIZE = 1
-
-size_references = [2, 8, 16, 22, 32]
+SIZES_TO_TEST = [2, 8, 16, 22, 32]
 
 def generate_vector_elements_string(size):
     return vector_string_from_np_vector(np.random.randint(0, 9, size))
@@ -32,7 +33,7 @@ def random_vector_string(size):
 
 # Generate vector operations
 var_num = 0
-for i in size_references:
+for i in SIZES_TO_TEST:
     # Addition operations
     print('void test_vector_addition() {')
     for j in range(OPERATIONS_PER_SIZE):
@@ -40,12 +41,11 @@ for i in size_references:
         v2 = np.random.randint(0, 9, i)
         res = v1 + v2
 
-        print(vectordef_string_from_np_vector('a{}'.format(var_num), v1))
-        print(vectordef_string_from_np_vector('b{}'.format(var_num), v2))
-        print('auto r{} = a{} + b{};'.format(var_num, var_num, var_num))
-        print(vectordef_string_from_np_vector('e{}'.format(var_num), res))
-        print('assert(r{} == e{});'.format(var_num, var_num))
-        print('')
+        print('    ' + vectordef_string_from_np_vector('a{}'.format(var_num), v1))
+        print('    ' + vectordef_string_from_np_vector('b{}'.format(var_num), v2))
+        print('    ' + 'auto r{} = a{} + b{};'.format(var_num, var_num, var_num))
+        print('    ' + vectordef_string_from_np_vector('e{}'.format(var_num), res))
+        print('    ' + 'assert(r{} == e{});'.format(var_num, var_num))
 
         var_num = var_num + 1
     print('}')
@@ -58,27 +58,46 @@ for i in size_references:
         v2 = np.random.randint(0, 9, i)
         res = v1 - v2
 
-        print(vectordef_string_from_np_vector('a{}'.format(var_num), v1))
-        print(vectordef_string_from_np_vector('b{}'.format(var_num), v2))
-        print('auto r{} = a{} - b{};'.format(var_num, var_num, var_num))
-        print(vectordef_string_from_np_vector('e{}'.format(var_num), res))
-        print('assert(r{} == e{});'.format(var_num, var_num))
-        print('')
+        print('    ' + vectordef_string_from_np_vector('a{}'.format(var_num), v1))
+        print('    ' + vectordef_string_from_np_vector('b{}'.format(var_num), v2))
+        print('    ' + 'auto r{} = a{} - b{};'.format(var_num, var_num, var_num))
+        print('    ' + vectordef_string_from_np_vector('e{}'.format(var_num), res))
+        print('    ' + 'assert(r{} == e{});'.format(var_num, var_num))
 
         var_num = var_num + 1
+    print('}')
     var_num = 0
 
     print('void test_vector_dot() {')
     for j in range(OPERATIONS_PER_SIZE):
         v1 = np.random.randint(0, 9, i)
         v2 = np.random.randint(0, 9, i)
+        res = np.dot(v1, v2)
+
+        print('    ' + vectordef_string_from_np_vector('a{}'.format(var_num), v1))
+        print('    ' + vectordef_string_from_np_vector('b{}'.format(var_num), v2))
+        print('    ' + 'auto r{} = dot(a{}, b{});'.format(var_num, var_num, var_num))
+        print('    ' + 'float e{} = {}'.format(var_num, res))
+        print('    ' + 'assert(r{} == e{});'.format(var_num, var_num))
+
+        var_num = var_num + 1
+    var_num = 0
+    print('}')
+
+    print('void test_vector_length() {')
+    for j in range(OPERATIONS_PER_SIZE):
+        v1 = np.random.randint(0, 9, i)
+        v2 = np.random.randint(0, 9, i)
         res = v1 - v2
 
-        print(vectordef_string_from_np_vector('a{}'.format(var_num), v1))
-        print(vectordef_string_from_np_vector('b{}'.format(var_num), v2))
-        print('auto r{} = dot(a{}, b{});'.format(var_num, var_num, var_num))
-        print(vectordef_string_from_np_vector('e{}'.format(var_num), res))
-        print('assert(r{} == e{});'.format(var_num, var_num))
+        print('    ' + vectordef_string_from_np_vector('a{}'.format(var_num), v1))
+        print('    ' + vectordef_string_from_np_vector('b{}'.format(var_num), v2))
+        print('    ' + 'auto r{} = dot(a{}, b{});'.format(var_num, var_num, var_num))
+        print('    ' + vectordef_string_from_np_vector('e{}'.format(var_num), res))
+        print('    ' + 'assert(r{} == e{});'.format(var_num, var_num))
         print('')
+
+        var_num = var_num + 1
     var_num = 0
+    print('}')
 
