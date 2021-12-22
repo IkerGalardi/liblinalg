@@ -54,7 +54,14 @@ def print_vector_comparison_tests():
 
 
 def print_vector_deep_copies_tests():
-    print('// TODO: vector deep copies test')
+    # TODO: investigate if it's necessary to test deep copies for different sizes,
+    #       probably not but who knows.
+    print('void test_vector_deep_copies() {')
+    print('    vecf<2> a = {1, 2};')
+    print('    auto b = a;')
+    print('    b.data[0] = 7;')
+    print('    assert((a.data[0]) == 1);')
+    print('}')
 
 def print_vector_addition_tests():
     print('void test_vector_addition() {')
@@ -193,7 +200,7 @@ print_vector_multiplication_tests()
 print('')
 print('int main() {')
 print('    EXECUTE_TEST(test_vector_comparisons);')
-#print('    EXECUTE_TEST(test_vector_deep_copies);')
+print('    EXECUTE_TEST(test_vector_deep_copies);')
 print('    EXECUTE_TEST(test_vector_addition);')
 print('    EXECUTE_TEST(test_vector_substraction);')
 print('    EXECUTE_TEST(test_vector_length);')
