@@ -93,7 +93,7 @@ vecf<size> operator+(const vecf<size>& left, const vecf<size>& right) {
     // Process in elements using AVX2 instructions
     for(int i = 0; i < parallel_iterations; i += LIBLINALG_PARALLEL_FLOATS) {
         __m256 left_elem = _mm256_load_ps(left.data + i);
-        __m256 right_elem = _mm256_load_ps(left.data + i);
+        __m256 right_elem = _mm256_load_ps(right.data + i);
         __m256 res_elem = _mm256_add_ps(left_elem, right_elem);
         _mm256_store_ps(result.data + i, res_elem);
     }
