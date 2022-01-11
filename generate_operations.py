@@ -18,7 +18,7 @@ def generate_vector_elements(size):
 # creation: '{e1, e2, e3, ...}'
 #
 def vector_string_from_array(vector):
-    elements_string = np.array2string(vector, separator=',')
+    elements_string = np.array2string(vector, separator=',', threshold=1000000)
     elements_string = elements_string.replace('[', '{')
     elements_string = elements_string.replace(']', '}')
 
@@ -32,6 +32,12 @@ def vector_definition_from_array(name, vector):
     elems = vector_string_from_array(vector)
     vector_string = vector_string + elems + ';'
     return vector_string
+
+def matrix_definition_from_array(name, nrow, ncol, vector):
+    matrix_string = "matf<{}, {}> {} = ".format(nrow, ncol, name)
+    elems = vector_string_from_array(vector)
+    matrix_string = matrix_string + elems + ';'
+    return matrix_string
 
 def print_vector_comparison_tests():
     print('void test_vector_comparisons() {')
@@ -194,6 +200,24 @@ def print_matrix_deep_copies_tests():
     print('    assert((a(0, 0) == 1));')
     print('}')
 
+def print_matrix_comparisons_tests():
+    print('void test_matrix_comparisons() {')
+    var_num = 0
+    for nrow in SIZES_TO_TEST:
+        for ncol in SIZES_TO_TEST:
+            for j in range(OPERATIONS_PER_SIZE):
+                a1_name = "a{}".format(var_num)
+                b1_name = "b{}".format(var_num)
+
+                a = generate_vector_elements(nrow * ncol)
+
+                print('    ' + matrix_definition_from_array(a1_name, nrow, ncol, a))
+                print('    ' + matrix_definition_from_array(b1_name, nrow, ncol, a))
+                print('    assert(({} == {}));'.format(a1_name, b1_name));
+                
+                var_num = var_num + 1
+    print('}')
+
 
 # Printing all the headers and macros
 print('#include <cassert>')
@@ -217,6 +241,7 @@ print_vector_dot_tests()
 print_vector_multiplication_tests()
 print_matrix_indexing_tests()
 print_matrix_deep_copies_tests()
+print_matrix_comparisons_tests()
 
 # Printing the main function with all the tests
 print('')
@@ -230,7 +255,7 @@ print('    EXECUTE_TEST(test_vector_dotproduct);')
 print('    EXECUTE_TEST(test_vector_multiplication);')
 print('    EXECUTE_TEST(test_matrix_indexing);')
 print('    EXECUTE_TEST(test_matrix_deep_copies);')
-#print('    EXECUTE_TEST(test_matrix_comparisons);')
+print('    EXECUTE_TEST(test_matrix_comparisons);')
 #print('    EXECUTE_TEST(test_matrix_addition);')
 #print('    EXECUTE_TEST(test_matrix_multiplication);')
 #print('    EXECUTE_TEST(test_matrix_vector_multiplication);')
