@@ -176,7 +176,7 @@ def print_vector_multiplication_tests():
     print('}')
 
 def print_matrix_indexing_tests():
-    print('void test_matrix_inexing() {')
+    print('void test_matrix_indexing() {')
     print('    matf<2, 2> a = {1, 2, ')
     print('                3, 4};')
     print('    assert((a(0, 1) == 2));')
@@ -184,6 +184,16 @@ def print_matrix_indexing_tests():
     print('                    5, 6, 7, 8};')
     print('    assert((b(0, 3) == 4));')
     print('}')
+
+def print_matrix_deep_copies_tests():
+    print('void test_matrix_deep_copies() {')
+    print('    matf<2, 2> a = {1, 2, ')
+    print('                    3, 4};')
+    print('    matf<2, 2> b = a;')
+    print('    b(0, 0) = 7;')
+    print('    assert((a(0, 0) == 1));')
+    print('}')
+
 
 # Printing all the headers and macros
 print('#include <cassert>')
@@ -206,6 +216,7 @@ print_vector_length_tests()
 print_vector_dot_tests()
 print_vector_multiplication_tests()
 print_matrix_indexing_tests()
+print_matrix_deep_copies_tests()
 
 # Printing the main function with all the tests
 print('')
@@ -218,7 +229,7 @@ print('    EXECUTE_TEST(test_vector_length);')
 print('    EXECUTE_TEST(test_vector_dotproduct);')
 print('    EXECUTE_TEST(test_vector_multiplication);')
 print('    EXECUTE_TEST(test_matrix_indexing);')
-#print('    EXECUTE_TEST(test_matrix_deep_copies);')
+print('    EXECUTE_TEST(test_matrix_deep_copies);')
 #print('    EXECUTE_TEST(test_matrix_comparisons);')
 #print('    EXECUTE_TEST(test_matrix_addition);')
 #print('    EXECUTE_TEST(test_matrix_multiplication);')
