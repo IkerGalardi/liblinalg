@@ -4,7 +4,7 @@
 ## Project status
 The project is now on a stable version with multiple backends and tests but there are things that I want to do:
 
-* Using AVX2 or AVX512 instruction to accelerate even bigger matrix and vector multiplications.
+* AVX512 instruction to accelerate even bigger matrix and vector multiplications.
 
 * Using SIMD instructions for arm machines.
 
@@ -24,6 +24,8 @@ Being a header only library, the only thing necessary to use the library is to a
 * `LIBLINALG_BACKEND_SIMPLE_CPU`: backend does not use any special instructions. It's mainly used to compare the performance from what most lineal algebra libraries do.
 
 * `LIBLINALG_BACKEND_SIMD_SSE`: backend uses SSE instructions to accelerate operations. It's important to use the `-msse4.2` flag when compiling. SSE instructions are supported on 98% of the x86 processors.
+
+* `LIBLINALG_BACKEND_SIMD_AVX2`: backend uses AVX2 instructions to accelerate operations. It's importat to use the `-mavx2` flag when compiling.
 
 ## Performance results
 The results of our performance tests on a Ryzen 7 3700X are the next:

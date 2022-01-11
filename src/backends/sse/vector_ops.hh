@@ -98,7 +98,7 @@ vecf<size> operator+(const vecf<size>& left, const vecf<size>& right) {
     // Process in elements using SSE2 instructions
     for(int i = 0; i < parallel_iterations; i += 4) {
         __m128 left_elem = _mm_load_ps(left.data + i);
-        __m128 right_elem = _mm_load_ps(left.data + i);
+        __m128 right_elem = _mm_load_ps(right.data + i);
         __m128 res_elem = _mm_add_ps(left_elem, right_elem);
         _mm_store_ps(result.data + i, res_elem);
     }
