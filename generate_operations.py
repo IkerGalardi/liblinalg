@@ -34,7 +34,7 @@ def vector_definition_from_array(name, vector):
     return vector_string
 
 def matrix_definition_from_array(name, nrow, ncol, vector):
-    matrix_string = "matf<{}, {}> {} = ".format(nrow, ncol, name)
+    matrix_string = "matf<{}, {}> {} = ".format(ncol, nrow, name)
     elems = vector_string_from_array(vector)
     matrix_string = matrix_string + elems + ';'
     return matrix_string
