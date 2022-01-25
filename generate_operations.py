@@ -245,6 +245,33 @@ def print_matrix_addition_tests():
                 var_num = var_num + 1
     print('}')
 
+def print_matrix_multiplication_tests():
+    print('void test_matrix_multiplication() {')
+    print('    // Scalar * Matrix operations')
+    var_num = 0
+    for nrow in SIZES_TO_TEST:
+        for ncol in SIZES_TO_TEST:
+            for j in range(OPERATIONS_PER_SIZE):
+                a1_name = "a{}".format(var_num)
+                b1_name = "b{}".format(var_num)
+                r1_name = "r{}".format(var_num)
+                e1_name = "e{}".format(var_num)
+
+                a = generate_vector_elements(nrow * ncol)
+                b = generate_vector_elements(1)[0]
+
+                mat_a = np.reshape(a, (-1, ncol))
+                mat_e = np.multiply(a, b)
+                e = mat_e.flatten()
+
+                print('    ' + matrix_definition_from_array(a1_name, nrow, ncol, a))
+                print('    float {} = {};'.format(b1_name, b))
+                print('    ' + matrix_definition_from_array(e1_name, nrow, ncol, e))
+                print('    assert(({} * {} == {}));'.format(b1_name, a1_name, e1_name));
+                
+                var_num = var_num + 1
+    print('    // Matrix * Matrix operations')
+    print('}')
 
 # Printing all the headers and macros
 print('#include <cassert>')
@@ -270,6 +297,7 @@ print_matrix_indexing_tests()
 print_matrix_deep_copies_tests()
 print_matrix_comparisons_tests()
 print_matrix_addition_tests()
+print_matrix_multiplication_tests()
 
 # Printing the main function with all the tests
 print('')
@@ -285,6 +313,6 @@ print('    EXECUTE_TEST(test_matrix_indexing);')
 print('    EXECUTE_TEST(test_matrix_deep_copies);')
 print('    EXECUTE_TEST(test_matrix_comparisons);')
 print('    EXECUTE_TEST(test_matrix_addition);')
-#print('    EXECUTE_TEST(test_matrix_multiplication);')
+print('    EXECUTE_TEST(test_matrix_multiplication);')
 #print('    EXECUTE_TEST(test_matrix_vector_multiplication);')
 print('}')
