@@ -22,6 +22,8 @@ This should be done using the pull request system provided by github. The issue 
 |-------------------------------------------------|
 | In depth description of the feature/enhancement |
 
+As much of the code written should be documented by comments or on the pull request.
+
 ## Bug acknowledgement
 This should be done using the issue system provided by github. The issue should follow the next format:
 
