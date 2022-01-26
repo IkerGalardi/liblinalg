@@ -44,5 +44,7 @@ Results are not the best, as the theoretical acceleration factor should de near 
 ## Contributions
 Contributions helping to solve bugs or implementing special matrices or vectors such as those used in computer graphics are welcome! But pull requests implementing backends are going to be ignored as this project is mainly used to learn about SIMD.
 
+For a more detailed overview of how to format or structure issues see the [contributing guide](Contributing.md).
+
 ## FAQ
 * **I just cloned the repository, but executing tests only spits errors.** This happens because the scripts that execute the tests expects the `bin/` folder to be created. Git does not support pushing empty folders, so for now the solution is to create that folder yourself by executing `mkdir bin` on the root of the project.
