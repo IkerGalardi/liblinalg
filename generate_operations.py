@@ -44,14 +44,14 @@ def print_vector_comparison_tests():
     var_num = 0
     for i in SIZES_TO_TEST:
         for j in range(OPERATIONS_PER_SIZE):
-            a1_name = "a{}".format(var_num)
-            b1_name = "b{}".format(var_num)
+            a_name = "a{}".format(var_num)
+            b_name = "b{}".format(var_num)
 
             a = generate_vector_elements(i)
             b = a
 
-            print('    ' + vector_definition_from_array(a1_name, a))
-            print('    ' + vector_definition_from_array(b1_name, b))
+            print('    ' + vector_definition_from_array(a_name, a))
+            print('    ' + vector_definition_from_array(b_name, b))
             print('    assert((a{} == b{}));'.format(var_num, var_num));
             
             var_num = var_num + 1
@@ -74,17 +74,17 @@ def print_vector_addition_tests():
     var_num = 0
     for i in SIZES_TO_TEST:
         for j in range(OPERATIONS_PER_SIZE):
-            a1_name = "a{}".format(var_num)
-            b1_name = "b{}".format(var_num)
-            e1_name = "e{}".format(var_num)
+            a_name = "a{}".format(var_num)
+            b_name = "b{}".format(var_num)
+            e_name = "e{}".format(var_num)
 
             a = generate_vector_elements(i)
             b = generate_vector_elements(i)
             e = a + b
 
-            print('    ' + vector_definition_from_array(a1_name, a))
-            print('    ' + vector_definition_from_array(b1_name, b))
-            print('    ' + vector_definition_from_array(e1_name, e))
+            print('    ' + vector_definition_from_array(a_name, a))
+            print('    ' + vector_definition_from_array(b_name, b))
+            print('    ' + vector_definition_from_array(e_name, e))
             print('    auto r{} = a{} + b{};'.format(var_num, var_num, var_num))
             print('    assert((r{} == e{}));'.format(var_num, var_num));
             
@@ -97,17 +97,17 @@ def print_vector_substraction_tests():
     var_num = 0
     for i in SIZES_TO_TEST:
         for j in range(OPERATIONS_PER_SIZE):
-            a1_name = "a{}".format(var_num)
-            b1_name = "b{}".format(var_num)
-            e1_name = "e{}".format(var_num)
+            a_name = "a{}".format(var_num)
+            b_name = "b{}".format(var_num)
+            e_name = "e{}".format(var_num)
 
             a = generate_vector_elements(i)
             b = generate_vector_elements(i)
             e = a - b
 
-            print('    ' + vector_definition_from_array(a1_name, a))
-            print('    ' + vector_definition_from_array(b1_name, b))
-            print('    ' + vector_definition_from_array(e1_name, e))
+            print('    ' + vector_definition_from_array(a_name, a))
+            print('    ' + vector_definition_from_array(b_name, b))
+            print('    ' + vector_definition_from_array(e_name, e))
             print('    auto r{} = a{} - b{};'.format(var_num, var_num, var_num))
             print('    assert((r{} == e{}));'.format(var_num, var_num));
             
@@ -120,12 +120,12 @@ def print_vector_length_tests():
     var_num = 0
     for i in SIZES_TO_TEST:
         for j in range(OPERATIONS_PER_SIZE):
-            a1_name = "a{}".format(var_num)
+            a_name = "a{}".format(var_num)
 
             a = generate_vector_elements(i)
             e = sum(i**2 for i in a)
 
-            print('    ' + vector_definition_from_array(a1_name, a))
+            print('    ' + vector_definition_from_array(a_name, a))
             print('    float e{} = {};'.format(var_num, e))
             print('    auto r{} = length_squared(a{});'.format(var_num, var_num))
             print('    assert((r{} == e{}));'.format(var_num, var_num));
@@ -139,16 +139,16 @@ def print_vector_dot_tests():
     var_num = 0
     for i in SIZES_TO_TEST:
         for j in range(OPERATIONS_PER_SIZE):
-            a1_name = "a{}".format(var_num)
-            b1_name = "b{}".format(var_num)
-            e1_name = "e{}".format(var_num)
+            a_name = "a{}".format(var_num)
+            b_name = "b{}".format(var_num)
+            e_name = "e{}".format(var_num)
 
             a = generate_vector_elements(i)
             b = generate_vector_elements(i)
             e = np.dot(a, b)
 
-            print('    ' + vector_definition_from_array(a1_name, a))
-            print('    ' + vector_definition_from_array(b1_name, b))
+            print('    ' + vector_definition_from_array(a_name, a))
+            print('    ' + vector_definition_from_array(b_name, b))
             print('    float e{} = {};'.format(var_num, e))
             print('    auto r{} = dot(a{}, b{});'.format(var_num, var_num, var_num))
             print('    assert((r{} == e{}));'.format(var_num, var_num));
@@ -163,17 +163,17 @@ def print_vector_multiplication_tests():
     var_num = 0
     for i in SIZES_TO_TEST:
         for j in range(OPERATIONS_PER_SIZE):
-            a1_name = "a{}".format(var_num)
-            b1_name = "b{}".format(var_num)
-            e1_name = "e{}".format(var_num)
+            a_name = "a{}".format(var_num)
+            b_name = "b{}".format(var_num)
+            e_name = "e{}".format(var_num)
 
             a = generate_vector_elements(i)
             b = generate_vector_elements(i)
             e = np.multiply(a, b)
 
-            print('    ' + vector_definition_from_array(a1_name, a))
-            print('    ' + vector_definition_from_array(b1_name, b))
-            print('    ' + vector_definition_from_array(e1_name, e))
+            print('    ' + vector_definition_from_array(a_name, a))
+            print('    ' + vector_definition_from_array(b_name, b))
+            print('    ' + vector_definition_from_array(e_name, e))
             print('    auto r{} = a{} * b{};'.format(var_num, var_num, var_num))
             print('    assert((r{} == e{}));'.format(var_num, var_num));
             
@@ -206,14 +206,14 @@ def print_matrix_comparisons_tests():
     for nrow in SIZES_TO_TEST:
         for ncol in SIZES_TO_TEST:
             for j in range(OPERATIONS_PER_SIZE):
-                a1_name = "a{}".format(var_num)
-                b1_name = "b{}".format(var_num)
+                a_name = "a{}".format(var_num)
+                b_name = "b{}".format(var_num)
 
                 a = generate_vector_elements(nrow * ncol)
 
-                print('    ' + matrix_definition_from_array(a1_name, nrow, ncol, a))
-                print('    ' + matrix_definition_from_array(b1_name, nrow, ncol, a))
-                print('    assert(({} == {}));'.format(a1_name, b1_name));
+                print('    ' + matrix_definition_from_array(a_name, nrow, ncol, a))
+                print('    ' + matrix_definition_from_array(b_name, nrow, ncol, a))
+                print('    assert(({} == {}));'.format(a_name, b_name));
                 
                 var_num = var_num + 1
     print('}')
@@ -224,10 +224,10 @@ def print_matrix_addition_tests():
     for nrow in SIZES_TO_TEST:
         for ncol in SIZES_TO_TEST:
             for j in range(OPERATIONS_PER_SIZE):
-                a1_name = "a{}".format(var_num)
-                b1_name = "b{}".format(var_num)
-                r1_name = "r{}".format(var_num)
-                e1_name = "e{}".format(var_num)
+                a_name = "a{}".format(var_num)
+                b_name = "b{}".format(var_num)
+                r_name = "r{}".format(var_num)
+                e_name = "e{}".format(var_num)
 
                 a = generate_vector_elements(nrow * ncol)
                 b = generate_vector_elements(nrow * ncol)
@@ -237,10 +237,10 @@ def print_matrix_addition_tests():
                 mat_e = np.add(a, b)
                 e = mat_e.flatten()
 
-                print('    ' + matrix_definition_from_array(a1_name, nrow, ncol, a))
-                print('    ' + matrix_definition_from_array(b1_name, nrow, ncol, b))
-                print('    ' + matrix_definition_from_array(e1_name, nrow, ncol, e))
-                print('    assert(({} + {} == {}));'.format(a1_name, b1_name, e1_name));
+                print('    ' + matrix_definition_from_array(a_name, nrow, ncol, a))
+                print('    ' + matrix_definition_from_array(b_name, nrow, ncol, b))
+                print('    ' + matrix_definition_from_array(e_name, nrow, ncol, e))
+                print('    assert(({} + {} == {}));'.format(a_name, b_name, e_name));
                 
                 var_num = var_num + 1
     print('}')
@@ -252,10 +252,10 @@ def print_matrix_multiplication_tests():
     for nrow in SIZES_TO_TEST:
         for ncol in SIZES_TO_TEST:
             for j in range(OPERATIONS_PER_SIZE):
-                a1_name = "a{}".format(var_num)
-                b1_name = "b{}".format(var_num)
-                r1_name = "r{}".format(var_num)
-                e1_name = "e{}".format(var_num)
+                a_name = "a{}".format(var_num)
+                b_name = "b{}".format(var_num)
+                r_name = "r{}".format(var_num)
+                e_name = "e{}".format(var_num)
 
                 a = generate_vector_elements(nrow * ncol)
                 b = generate_vector_elements(1)[0]
@@ -264,13 +264,35 @@ def print_matrix_multiplication_tests():
                 mat_e = np.multiply(a, b)
                 e = mat_e.flatten()
 
-                print('    ' + matrix_definition_from_array(a1_name, nrow, ncol, a))
-                print('    float {} = {};'.format(b1_name, b))
-                print('    ' + matrix_definition_from_array(e1_name, nrow, ncol, e))
-                print('    assert(({} * {} == {}));'.format(b1_name, a1_name, e1_name));
+                print('    ' + matrix_definition_from_array(a_name, nrow, ncol, a))
+                print('    float {} = {};'.format(b_name, b))
+                print('    ' + matrix_definition_from_array(e_name, nrow, ncol, e))
+                print('    assert(({} * {} == {}));'.format(b_name, a_name, e_name));
                 
                 var_num = var_num + 1
+
     print('    // Matrix * Matrix operations')
+    for nrow in SIZES_TO_TEST:
+        for ncol in SIZES_TO_TEST:
+            for j in range(OPERATIONS_PER_SIZE):
+                a_name = "a{}".format(var_num)
+                b_name = "b{}".format(var_num)
+                r_name = "r{}".format(var_num)
+                e_name = "e{}".format(var_num)
+
+                a = generate_vector_elements(nrow * ncol)
+                b = generate_vector_elements(1)[0]
+
+                mat_a = np.reshape(a, (-1, ncol))
+                mat_e = np.multiply(a, b)
+                e = mat_e.flatten()
+
+                print('    ' + matrix_definition_from_array(a_name, nrow, ncol, a))
+                print('    float {} = {};'.format(b_name, b))
+                print('    ' + matrix_definition_from_array(e_name, nrow, ncol, e))
+                print('    assert(({} * {} == {}));'.format(b_name, a_name, e_name));
+                
+                var_num = var_num + 1
     print('}')
 
 # Printing all the headers and macros
