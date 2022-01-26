@@ -5,8 +5,11 @@
  * If the vector's element count doesn't match matrix's number of columns a compile time 
  * error is thrown.
  */
-template<size_t nrow, size_t ncol>
-vecf<nrow> operator*(const matf<nrow, ncol>& mat, const vecf<ncol>& vec) {
+template<size_t nrow, size_t ncol, size_t vlen>
+vecf<nrow> operator*(const matf<nrow, ncol>& mat, const vecf<vlen>& vec) {
+    static_assert(ncol == vlen,
+                  "Vector length is not equal to the number of columns of the matrix");
+
     vecf<nrow> result;
     for(int i = 0; i < nrow; i++) {
         float sum = 0.0f;
@@ -25,8 +28,11 @@ vecf<nrow> operator*(const matf<nrow, ncol>& mat, const vecf<ncol>& vec) {
  * If the vector's element count doesn't match matrix's number of columns a compile time
  * error is thrown.
  */
-template<size_t nrow, size_t ncol>
-vecf<ncol> operator*(const vecf<ncol>& vec, const matf<nrow, ncol>& mat) {
+template<size_t nrow, size_t ncol, size_t vlen>
+vecf<ncol> operator*(const vecf<vlen>& vec, const matf<nrow, ncol>& mat) {
+    static_assert(vlen == ncol,
+                  "Vector length is not equal to the number of columns of the matrix");
+
     vecf<ncol> result;
     for(int i = 0; i < ncol; i++) {
         float sum = 0.0f;
