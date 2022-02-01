@@ -278,19 +278,19 @@ def print_matrix_multiplication_tests():
                 for j in range(OPERATIONS_PER_SIZE):
                     a_name = "a{}".format(var_num)
                     b_name = "b{}".format(var_num)
-                    r_name = "r{}".format(var_num)
                     e_name = "e{}".format(var_num)
 
                     a = generate_vector_elements(nrow * ncol)
                     b = generate_vector_elements(ncol * rncol)
 
-                    mat_a = np.reshape(a, (ncol,  nrow))
-                    mat_b = np.reshape(b, (rncol, ncol))
+                    mat_a = np.reshape(a, (nrow,  ncol))
+                    mat_b = np.reshape(b, (ncol, rncol))
                     
-                    print(mat_a, flush=True)
-                    print(mat_b, flush=True)
-
-                    mat_e = np.dot(a, b)
+                    #print(mat_a, flush=True)
+                    #print(mat_b, flush=True)
+                    
+                    #print(f'{mat_a.shape}, ')
+                    mat_e = np.dot(mat_a, mat_b)
                     e = mat_e.flatten()
                     print('    ' + matrix_definition_from_array(a_name, nrow, ncol, a))
                     print('    ' + matrix_definition_from_array(b_name, ncol, rncol, b))
