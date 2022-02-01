@@ -292,10 +292,10 @@ def print_matrix_multiplication_tests():
                     #print(f'{mat_a.shape}, ')
                     mat_e = np.dot(mat_a, mat_b)
                     e = mat_e.flatten()
-                    print('    ' + matrix_definition_from_array(a_name, nrow, ncol, a))
-                    print('    ' + matrix_definition_from_array(b_name, ncol, rncol, b))
-                    print('    ' + matrix_definition_from_array(e_name, nrow, ncol, e))
-                    print('    assert(({} * {} == {}));'.format(a_name, b_name, e_name));
+                    print('    ' + matrix_definition_from_array(a_name, ncol, nrow, a))
+                    print('    ' + matrix_definition_from_array(b_name, rncol, ncol, b))
+                    print('    ' + matrix_definition_from_array(e_name, rncol, nrow, e))
+                    print('    assert(({} * {} == {}));'.format(a_name, b_name, e_name))
                     
                     var_num = var_num + 1
     print('}')
