@@ -1,6 +1,6 @@
 #!/bin/sh
 
-if [ $1 = "help" ] || [ -z $1 ]
+if [ $1="help" ] || [ -z $1 ]
 then
     echo "A backend needs to be selected to test."
     echo "Available options are SIMD_SSE and SIMPLE_CPU."
