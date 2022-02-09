@@ -100,6 +100,8 @@ template<size_t nrow, size_t ncol>
 matf<nrow, ncol> operator*(float scalar, const matf<nrow, ncol>& right) {
     matf<nrow, ncol> result;
 
+    std::cout << "Scalar = " << scalar << std::endl;
+
     // Not all elements can be processed in parallel, so we calculate how much
     // we need to do in serie.
     constexpr int cant_process = ncol % LIBLINALG_PARALLEL_FLOATS;
@@ -116,7 +118,7 @@ matf<nrow, ncol> operator*(float scalar, const matf<nrow, ncol>& right) {
         // Some elements couldn't be processed in parallel, process them now
         // in serie.
         for(int j = ncol - cant_process; j < ncol; j++) {
-            result(i, j) *= scalar;
+            result(i, j) = right(i, j) * scalar;
         }
     }
 
