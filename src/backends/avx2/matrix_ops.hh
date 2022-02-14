@@ -116,7 +116,7 @@ matf<nrow, ncol> operator*(float scalar, const matf<nrow, ncol>& right) {
         // Some elements couldn't be processed in parallel, process them now
         // in serie.
         for(int j = ncol - cant_process; j < ncol; j++) {
-            result(i, j) *= scalar;
+            result(i, j) = right(i, j) * scalar;
         }
     }
 
